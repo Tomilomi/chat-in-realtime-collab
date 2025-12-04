@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chat-in-realtime", "chat-in
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infraestructure", "..\Infraestructure\Infraestructure.csproj", "{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "..\Application\Application.csproj", "{E8F76080-2710-429C-A12A-79CCDE0E62B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "..\Domain\Domain.csproj", "{4A5FA653-6580-4DC8-9059-1CD40CEC183A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8F76080-2710-429C-A12A-79CCDE0E62B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8F76080-2710-429C-A12A-79CCDE0E62B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8F76080-2710-429C-A12A-79CCDE0E62B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8F76080-2710-429C-A12A-79CCDE0E62B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A5FA653-6580-4DC8-9059-1CD40CEC183A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A5FA653-6580-4DC8-9059-1CD40CEC183A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A5FA653-6580-4DC8-9059-1CD40CEC183A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A5FA653-6580-4DC8-9059-1CD40CEC183A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
