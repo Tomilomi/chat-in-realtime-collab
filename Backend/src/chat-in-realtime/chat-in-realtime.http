@@ -1,0 +1,6 @@
+@chat_in_realtime_HostAddress = http://localhost:5135
+
+GET {{chat_in_realtime_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
