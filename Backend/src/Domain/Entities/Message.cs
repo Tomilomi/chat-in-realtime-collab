@@ -1,11 +1,11 @@
 ﻿namespace Domain.Entity
 {
-    internal class Message
+    public class Message
     {
-        private Guid Id { get; set; }
-        private User Sender { get; set; }
-        private string Content { get; set; }
-        private DateTime Timestamp { get; set; }
+        public Guid Id { get; private set; }
+        public User Sender { get; private set; }
+        public string Content { get; private set; }
+        public DateTime Timestamp { get; private set; }
 
         //private int receiverId; maybe? al pedo
     }
