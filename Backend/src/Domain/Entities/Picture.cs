@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entity
+﻿namespace Domain.Entity
 {
-    internal class Picture
+    public class Picture
     {
         private Guid Id { get; set; }
         private byte[] Data { get; set; }
