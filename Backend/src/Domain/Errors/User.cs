@@ -37,6 +37,10 @@ namespace Domain.Errors
                 code: "User.PasswordEmpty",
                 description: "The password cannot be null or whitespace."
             );
+            public static Error PasswordTooShort => Error.Validation(
+                code: "User.PasswordTooShort",
+                description: "The password is too short."
+            );
 
             public static Error InvalidPicture => Error.Validation(
                 code: "User.InvalidPicture",
