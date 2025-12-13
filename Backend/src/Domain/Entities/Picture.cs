@@ -2,9 +2,13 @@
 {
     public class Picture
     {
-        private Guid Id { get; set; }
-        private byte[] Data { get; set; }
+        public Guid Id { get; private set; }
+        public byte[] Data { get; private set; }
+
         // No se si esta bien el tipo de dato
         // Debe ser un blob en la base de datos
+
+        //propiedad de navegacion
+        public User User { get; private set; }
     }
 }
