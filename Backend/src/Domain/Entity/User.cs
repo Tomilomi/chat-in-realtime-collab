@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    internal class User
+    public class User
     {
-        private Guid Id { get; set; }
-        private string Username { get; set; }
-        private string Password { get; set; }
-        private Picture Picture { get; set; }
+        public Guid Id { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public Picture ProfilePicture { get; set; }
     }
 }

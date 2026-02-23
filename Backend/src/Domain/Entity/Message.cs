@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    internal class Message
+    public class Message
     {
-        private Guid Id { get; set; }
-        private User Sender { get; set; }
-        private string Content { get; set; }
-        private DateTime Timestamp { get; set; }
+        public Guid Id { get; set; }
+        public User Sender { get; set; }
+        public string Content { get; set; }
+        public DateTime Timestamp { get; set; }
 
         //private int receiverId; maybe? al pedo
     }
