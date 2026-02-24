@@ -45,4 +45,15 @@ app.MapControllers();
 // SignalR
 app.MapHub<ChatHub>("/chathub");
 
+
+// Reiniciar la base de datos al levantar
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureDeleted();
+    db.Database.EnsureCreated();
+}
+
 app.Run();
+
+
