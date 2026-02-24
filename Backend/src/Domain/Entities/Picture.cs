@@ -1,4 +1,5 @@
-﻿namespace Domain.Entity
+﻿
+namespace Domain.Entities
 {
     public class Picture
     {
@@ -7,6 +8,8 @@
 
         // No se si esta bien el tipo de dato
         // Debe ser un blob en la base de datos
+
+        public Guid UserId { get; private set; }
 
         //propiedad de navegacion
         public User User { get; private set; }
