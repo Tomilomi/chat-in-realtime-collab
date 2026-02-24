@@ -5,7 +5,24 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using chat_in_realtime.Hubs;
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.SetIsOriginAllowed(_ => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
 
 // Add services to the container.
 
@@ -37,6 +54,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -45,4 +64,15 @@ app.MapControllers();
 //ruta del chat
 app.MapHub<ChatHub>("/chathub");
 
+
+// Reiniciar la base de datos al levantar
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureDeleted();
+    db.Database.EnsureCreated();
+}
+
 app.Run();
+
+
