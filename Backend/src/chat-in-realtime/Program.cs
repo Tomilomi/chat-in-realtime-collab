@@ -5,7 +5,24 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using chat_in_realtime.Hubs;
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.SetIsOriginAllowed(_ => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
 
 // Add services to the container.
 
@@ -37,6 +54,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
