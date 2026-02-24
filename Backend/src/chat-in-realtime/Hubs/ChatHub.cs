@@ -1,27 +1,26 @@
-
+using Application.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace chat_in_realtime.Hubs;
 
-using Application.Interfaces;
-
-
 public class ChatHub : Hub
 {
+    private static readonly List<object> _messages = [];
     private readonly IMessageService _messageService;
+
     public ChatHub(IMessageService messageService)
     {
         _messageService = messageService;
     }
 
-    public async Task SendMessage(string username,string message)
+    public async Task SendMessage(string username, string content)
     {
-        await Clients.All.SendAsync("ReceiveMessage", username, message);
+        _messages.Add(new { username, content });
+        await Clients.All.SendAsync("ReceiveMessage", username, content);
     }
 
     public async Task LoadMessages()
     {
-        var messages = await _messageService.GetAllMessagesAsync();
-        await Clients.Caller.SendAsync("LoadMessages", messages);
+        await Clients.Caller.SendAsync("LoadMessages", _messages);
     }
 }
