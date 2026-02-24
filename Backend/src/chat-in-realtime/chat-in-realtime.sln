@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chat-in-realtime", "chat-in-realtime.csproj", "{9D7C4391-6ED6-43C1-8125-611A5E36A1AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infraestructure", "..\Infraestructure\Infraestructure.csproj", "{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "..\Infrastructure\Infrastructure.csproj", "{7030D3B8-52E6-4732-8D6F-1FC656C8EC26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "..\Application\Application.csproj", "{E8F76080-2710-429C-A12A-79CCDE0E62B2}"
 EndProject
