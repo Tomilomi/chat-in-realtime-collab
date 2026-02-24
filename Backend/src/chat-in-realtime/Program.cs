@@ -21,7 +21,6 @@ builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 // dependency injection
 
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
@@ -43,6 +42,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 // SignalR
+//ruta del chat
 app.MapHub<ChatHub>("/chathub");
 
 app.Run();
