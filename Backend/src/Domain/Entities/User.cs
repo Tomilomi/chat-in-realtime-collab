@@ -20,8 +20,9 @@ namespace Domain.Entity
         public Picture Picture { get; private set; }
 
         public ICollection<Message> SentMessages { get; private set; } = [];
-        public ICollection<Message> ReceivedMessages { get; private set; } = [];
-
+        // public ICollection<Message> ReceivedMessages { get; private set; } = [];
+        // Una sola sala 
+        
         private User()
         {
             Username = null!;
