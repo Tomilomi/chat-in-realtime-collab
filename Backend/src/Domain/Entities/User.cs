@@ -19,7 +19,7 @@ namespace Domain.Entities
         //propiades de navegación para el ORM
         public Picture Picture { get; private set; }
 
-        public ICollection<Message> SentMessages { get; private set; } = [];
+        // public ICollection<Message> SentMessages { get; private set; } = [];
         // public ICollection<Message> ReceivedMessages { get; private set; } = [];
         // Una sola sala
 
