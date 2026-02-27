@@ -15,5 +15,12 @@ namespace Infrastructure.Data
         public DbSet<Picture> Pictures { get; set; }
         // Tablas de la bbd
         
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Picture)
+                .WithOne(p => p.User)
+                .HasForeignKey<Picture>(p => p.Id);
+        }
     }
 }
