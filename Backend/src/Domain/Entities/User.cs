@@ -1,7 +1,7 @@
 ﻿using Domain.Errors;
 using ErrorOr;
 
-namespace Domain.Entity
+namespace Domain.Entities
 {
     /// <summary>
     /// Represents an application user, including identification, authentication credentials, and profile picture
@@ -19,10 +19,10 @@ namespace Domain.Entity
         //propiades de navegación para el ORM
         public Picture Picture { get; private set; }
 
-        public ICollection<Message> SentMessages { get; private set; } = [];
+        // public ICollection<Message> SentMessages { get; private set; } = [];
         // public ICollection<Message> ReceivedMessages { get; private set; } = [];
-        // Una sola sala 
-        
+        // Una sola sala
+
         private User()
         {
             Username = null!;
