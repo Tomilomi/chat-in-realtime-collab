@@ -61,6 +61,21 @@ public class ChatHub : Hub
 
     public async Task LoadMessages()
     {
-        throw new NotImplementedException();
+        //traerlos de la bd
+        var pastMessages = await _messageService.GetRecentMessagesAsync(20);
+
+        //mapearlos a dto
+        var messagesToLoad = pastMessages.Select(m => new MessageReceivedDTO(
+            Id: m.Id,
+            Content: m.Content,
+            Timestamp: m.Timestamp,
+            Sender: new UserSenderDTO(
+                    Id: m.Sender.Id,
+                    Username: m.Sender.Username
+                    )
+                )
+            ).ToList();
+
+        await Clients.Caller.SendAsync("LoadMessages", messagesToLoad);
     }
 }
