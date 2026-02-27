@@ -8,6 +8,12 @@
         public string Content { get; private set; }
         public DateTime Timestamp { get; private set; }
 
-        //private int receiverId; maybe? al pedo
+        public Message(Guid id, User sender, string content, DateTime timestamp)
+        {
+            Id = id;
+            Sender = sender;
+            Content = content;
+            Timestamp = timestamp;
+        }
     }
 }
