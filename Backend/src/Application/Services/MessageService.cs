@@ -17,7 +17,7 @@ namespace Application.Services
             return await _messageRepository.GetAllAsync();
         }
 
-        public async Task SendMessageAsync(Message message)
+        public async Task SaveMessageAsync(Message message)
         {
             await _messageRepository.AddAsync(message);
         }
