@@ -5,5 +5,5 @@
     /// </summary>
 
     public sealed record MessageReceivedDTO(Guid Id,
-        string Content, DateTime Timestamp, string SenderUsername);
+        string Content, DateTime Timestamp, UserSenderDTO Sender);
 }
