@@ -7,5 +7,7 @@ namespace Application.Interfaces
         Task<IEnumerable<Message>> GetAllMessagesAsync();
 
         Task SaveMessageAsync(Message message);
+
+        Task<IEnumerable<Message>> GetRecentMessagesAsync(int count);
     }
 }
