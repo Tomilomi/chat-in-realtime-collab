@@ -2,7 +2,6 @@ using Application.Common;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
-using System.Collections.Concurrent;
 
 namespace chat_in_realtime.Hubs;
 
