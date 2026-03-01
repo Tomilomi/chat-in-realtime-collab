@@ -13,5 +13,19 @@ namespace Domain.Entities
 
         //propiedad de navegacion
         public User User { get; private set; }
+        
+        // Constructores agregados
+        
+        public Picture(Guid id, byte[] data, Guid userId)
+        {
+            Id = id;
+            Data = data;
+            UserId = userId;
+        }
+        
+        private Picture() 
+        {
+            Data = [];
+        }
     }
 }

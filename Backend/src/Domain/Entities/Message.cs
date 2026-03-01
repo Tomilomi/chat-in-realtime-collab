@@ -15,5 +15,11 @@
             Content = content;
             Timestamp = timestamp;
         }
+        
+        private Message()
+        {
+            Sender = null!;
+            Content = null!;
+        }
     }
 }
