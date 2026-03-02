@@ -16,9 +16,9 @@ namespace Domain.Entities
         
         // Constructores agregados
         
-        public Picture(Guid id, byte[] data, Guid userId)
+        public Picture(byte[] data, Guid userId)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             Data = data;
             UserId = userId;
         }

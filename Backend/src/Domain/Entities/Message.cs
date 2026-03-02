@@ -8,12 +8,12 @@
         public string Content { get; private set; }
         public DateTime Timestamp { get; private set; }
 
-        public Message(Guid id, User sender, string content, DateTime timestamp)
+        public Message(User sender, string content)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             Sender = sender;
             Content = content;
-            Timestamp = timestamp;
+            Timestamp = DateTime.UtcNow;
         }
         
         private Message()

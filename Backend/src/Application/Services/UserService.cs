@@ -6,10 +6,12 @@ namespace Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPictureRepository _pictureRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IPictureRepository pictureRepository)
         {
             _userRepository = userRepository;
+            _pictureRepository = pictureRepository;
         }
         
         
@@ -19,16 +21,13 @@ namespace Application.Services
         }
         
 
-        public async Task RegisterAsync(string userName, string password, Guid userId)
+        public async Task RegisterAsync(string userName, string password, Guid pictureId)
         {
-            // Implementar en el picture repository
             
             var picture = await _pictureRepository.GetByIdAsync(pictureId)
                           ?? await _pictureRepository.GetDefaultAsync();
             
-            
-            if (picture is null) return;
-            var user = User.Create(userName, password, picture);
+            var user = User.Create(userName, password, picture!);
             if (user.IsError) return;
             await _userRepository.AddAsync(user.Value);
         }
@@ -37,8 +36,7 @@ namespace Application.Services
         {
             var user = await _userRepository.GetByUserNameAsync(userName);
             if (user is null) return null;
-            if (user.Password != password) return null;
-            return user;
+            return user.Password != password ? null : user;
         }
         
         

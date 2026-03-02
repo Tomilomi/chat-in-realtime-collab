@@ -4,6 +4,8 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<User> GetUserByIdAsync(Guid id);
+        Task<User?> GetUserByIdAsync(Guid id);
+        Task RegisterAsync(string username, string password, Guid pictureId);
+        Task<User?> LoginAsync(string username, string password);
     }
 }
