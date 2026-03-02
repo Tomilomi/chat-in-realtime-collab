@@ -1,19 +1,36 @@
-﻿
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Domain.Entities;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task AddAsync(User user)
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<User> GetByIdAsync(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .Include(u => u.Picture)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<User?> GetByUserNameAsync(string userName)
+        {
+            return await  _context.Users
+                .FirstOrDefaultAsync(u => u.Username == userName);
+        }
+
+        public async Task AddAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
     }
 }
