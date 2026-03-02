@@ -33,10 +33,8 @@ public class ChatHub : Hub
 
         //entidad para la bd
         var newMessage = new Message(
-            id: Guid.NewGuid(),
             sender: user,
-            content: messageIn.Content,
-            timestamp: DateTime.UtcNow
+            content: messageIn.Content
             );
 
         //guardar en bd

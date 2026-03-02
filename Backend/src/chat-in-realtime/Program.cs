@@ -38,6 +38,7 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPictureRepository, PictureRepository>();
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -69,8 +70,8 @@ using (var scope = app.Services.CreateScope())
 
     // SEEDER PARA TESTEAR
 
-    var picture1 = new Picture(Guid.NewGuid(), [], Guid.Empty);
-    var picture2 = new Picture(Guid.NewGuid(), [], Guid.Empty);
+    var picture1 = new Picture( [], Guid.Empty);
+    var picture2 = new Picture( [], Guid.Empty);
 
     var user1 = User.Create("Marcos", "password123", picture1).Value;
     var user2 = User.Create("Laura", "password123", picture2).Value;
@@ -78,9 +79,9 @@ using (var scope = app.Services.CreateScope())
     db.Users.AddRange(user1, user2);  // las Pictures se guardan solas
 
     db.Messages.AddRange(
-        new Message(Guid.NewGuid(), user1, "Hola! alguien probó el nuevo update?", DateTime.UtcNow.AddMinutes(-10)),
-        new Message(Guid.NewGuid(), user2, "Sí, está bastante bien!", DateTime.UtcNow.AddMinutes(-5)),
-        new Message(Guid.NewGuid(), user1, "Me re gustó la nueva sidebar", DateTime.UtcNow.AddMinutes(-2))
+        new Message(user1, "Hola! alguien probó el nuevo update?"),
+        new Message(user2, "Sí, está bastante bien!"),
+        new Message(user1, "Me re gustó la nueva sidebar")
     );
 
     db.SaveChanges();
