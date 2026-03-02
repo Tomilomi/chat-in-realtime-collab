@@ -1,16 +1,15 @@
-using Application.Interfaces;
-using Application.Services;
 using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using chat_in_realtime.Hubs;
 using Domain.Entities;
-using chat_in_realtime.Handlers;
+using Application.Extensions;
+using Infrastructure.Extensions;
+using chat_in_realtime.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,38 +45,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
-// CORS
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.SetIsOriginAllowed(_ => true)
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// SignalR
-builder.Services.AddSignalR();
-
-// PostgreSQL
-builder.Services.AddDbContext<AppDbContext>(options
-    => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// dependency injection
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddScoped<IMessageService, MessageService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPictureRepository, PictureRepository>();
+//add layer services
+builder.Services.AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation();
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -114,8 +85,8 @@ using (var scope = app.Services.CreateScope())
 
     // SEEDER PARA TESTEAR
 
-    var picture1 = new Picture( [], Guid.Empty);
-    var picture2 = new Picture( [], Guid.Empty);
+    var picture1 = new Picture([], Guid.Empty);
+    var picture2 = new Picture([], Guid.Empty);
 
     var user1 = User.Create("Marcos", "password123", picture1).Value;
     var user2 = User.Create("Laura", "password123", picture2).Value;
