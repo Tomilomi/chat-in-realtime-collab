@@ -10,12 +10,12 @@ namespace chat_in_realtime.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
 
-    public UserController(IUserService userService, IConfiguration configuration)
+    public AuthController(IUserService userService, IConfiguration configuration)
     {
         _userService = userService;
         _configuration = configuration;
@@ -28,7 +28,6 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestDTO request)
     {
@@ -38,7 +37,7 @@ public class UserController : ControllerBase
         var token = GenerateJwtToken(user.Id, user.Username);
         return Ok(new { token });
     }
-    
+
     private string GenerateJwtToken(Guid userId, string username)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
@@ -60,6 +59,4 @@ public class UserController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    
-    
 }
