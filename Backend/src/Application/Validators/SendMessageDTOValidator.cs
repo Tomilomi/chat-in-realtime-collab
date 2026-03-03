@@ -10,8 +10,8 @@ namespace chat_in_realtime.Validators
         public SendMessageDTOValidator()
         {
             RuleFor(x => x.Content)
-                .NotEmpty().WithError(DomainErrors.Message.Blank)
-                .MaximumLength(500).WithError(DomainErrors.Message.TooLong);
+                .NotEmpty().WithError(DomainErrors.Message.Validation.Blank)
+                .MaximumLength(500).WithError(DomainErrors.Message.Validation.TooLong);
         }
     }
 }
