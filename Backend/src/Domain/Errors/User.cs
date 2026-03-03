@@ -61,6 +61,14 @@ namespace Domain.Errors
                     description: "The provided picture is invalid."
                 );
             }
+
+            public static class Bussiness
+            {
+                public static Error IncorrectPassword => Error.Unauthorized(
+                    code: "User.IncorrectPassword",
+                    description: "The provided password does not match our records."
+                    );
+            }
         }
     }
 }
