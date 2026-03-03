@@ -67,11 +67,11 @@ namespace Domain.Entities
         {
             if (string.IsNullOrEmpty(username))
             {
-                return [DomainErrors.User.UsernameEmpty];
+                return [DomainErrors.User.Validation.UsernameEmpty];
             }
             if (username.Length < 3)
             {
-                return [DomainErrors.User.UsernameTooShort];
+                return [DomainErrors.User.Validation.UsernameTooShort];
             }
             return [];
         }
@@ -80,11 +80,11 @@ namespace Domain.Entities
         {
             if (string.IsNullOrEmpty(password))
             {
-                return [DomainErrors.User.PasswordEmpty];
+                return [DomainErrors.User.Validation.PasswordEmpty];
             }
             if (password.Length < 5)
             {
-                return [DomainErrors.User.PasswordTooShort];
+                return [DomainErrors.User.Validation.PasswordTooShort];
             }
             return [];
         }
