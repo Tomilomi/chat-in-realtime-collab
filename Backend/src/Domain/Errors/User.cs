@@ -13,6 +13,11 @@ namespace Domain.Errors
         /// validation across the application.</remarks>
         public static class User
         {
+            public static Error NotFound => Error.NotFound(
+                code: "User.NotFound",
+                description: "The specified user was not found."
+            );
+
             public static Error InvalidUsername => Error.Validation(
                 code: "User.InvalidUsername",
                 description: "The provided username is invalid."
@@ -37,6 +42,7 @@ namespace Domain.Errors
                 code: "User.PasswordEmpty",
                 description: "The password cannot be null or whitespace."
             );
+
             public static Error PasswordTooShort => Error.Validation(
                 code: "User.PasswordTooShort",
                 description: "The password is too short."
