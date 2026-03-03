@@ -10,7 +10,7 @@ namespace chat_in_realtime.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController : ApiController
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
