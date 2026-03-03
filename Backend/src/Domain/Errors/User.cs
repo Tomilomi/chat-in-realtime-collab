@@ -18,40 +18,49 @@ namespace Domain.Errors
                 description: "The specified user was not found."
             );
 
-            public static Error InvalidUsername => Error.Validation(
+            //validaciones
+            public static class Validation
+            {
+                public static Error InvalidUsername => Error.Validation(
                 code: "User.InvalidUsername",
                 description: "The provided username is invalid."
             );
 
-            public static Error UsernameTooShort => Error.Validation(
-                code: "User.UsernameTooShort",
-                description: "The username is too short."
-            );
+                public static Error UsernameTooShort => Error.Validation(
+                    code: "User.UsernameTooShort",
+                    description: "The username is too short."
+                );
 
-            public static Error UsernameEmpty => Error.Validation(
-                code: "User.UsernameEmpty",
-                description: "The username cannot be null or whitespace."
-            );
+                public static Error UsernameTooLong => Error.Validation(
+                    code: "User.UsernameTooLong",
+                    description: "The username is too long."
+                );
 
-            public static Error InvalidPassword => Error.Validation(
-                code: "User.InvalidPassword",
-                description: "The provided password is invalid."
-            );
+                public static Error UsernameEmpty => Error.Validation(
+                    code: "User.UsernameEmpty",
+                    description: "The username cannot be null or whitespace."
+                );
 
-            public static Error PasswordEmpty => Error.Validation(
-                code: "User.PasswordEmpty",
-                description: "The password cannot be null or whitespace."
-            );
+                public static Error InvalidPassword => Error.Validation(
+                    code: "User.InvalidPassword",
+                    description: "The provided password is invalid."
+                );
 
-            public static Error PasswordTooShort => Error.Validation(
-                code: "User.PasswordTooShort",
-                description: "The password is too short."
-            );
+                public static Error PasswordEmpty => Error.Validation(
+                    code: "User.PasswordEmpty",
+                    description: "The password cannot be null or whitespace."
+                );
 
-            public static Error InvalidPicture => Error.Validation(
-                code: "User.InvalidPicture",
-                description: "The provided picture is invalid."
-            );
+                public static Error PasswordTooShort => Error.Validation(
+                    code: "User.PasswordTooShort",
+                    description: "The password is too short."
+                );
+
+                public static Error InvalidPicture => Error.Validation(
+                    code: "User.InvalidPicture",
+                    description: "The provided picture is invalid."
+                );
+            }
         }
     }
 }
