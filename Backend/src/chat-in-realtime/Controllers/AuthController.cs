@@ -31,8 +31,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestDTO request)
     {
-        var user = await _userService.LoginAsync(request.Username, request.Password);
-        if (user is null) return Unauthorized();
+        var result = await _userService.LoginAsync(request.Username, request.Password);
+        if (result.IsError) return Unauthorized();
+        var user = result.Value;
 
         var token = GenerateJwtToken(user.Id, user.Username);
         return Ok(new { token });

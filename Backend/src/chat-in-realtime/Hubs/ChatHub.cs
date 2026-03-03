@@ -25,12 +25,13 @@ public class ChatHub : Hub
 
         //buscarlo en la bd
         //se puede mejorar el manejo de erorres
-        var user = await _userService.GetUserByIdAsync(userId);
-        if (user == null)
+        var result = await _userService.GetUserByIdAsync(userId);
+        if (result.IsError)
         {
             throw new HubException("Usuario no encontrado.");
         }
 
+        var user = result.Value;
         //entidad para la bd
         var newMessage = new Message(
             sender: user,

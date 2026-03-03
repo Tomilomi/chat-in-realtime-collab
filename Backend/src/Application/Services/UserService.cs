@@ -36,7 +36,8 @@ namespace Application.Services
         {
             var user = await _userRepository.GetByUserNameAsync(userName);
             if (user is null) return DomainErrors.User.NotFound;
-            return user.Password != password ? DomainErrors.User.InvalidPassword : user;
+            if (user.Password != password) { return DomainErrors.User.Bussiness.IncorrectPassword; }
+            return user;
         }
     }
 }
