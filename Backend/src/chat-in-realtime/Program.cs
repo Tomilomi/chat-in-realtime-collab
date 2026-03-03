@@ -10,45 +10,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-        };
-
-        // esto es para que SignalR pueda usar JWT
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
-                {
-                    context.Token = accessToken;
-                }
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-
-
 //add layer services
 builder.Services.AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddPresentation();
+    .AddPresentation(builder.Configuration);
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -63,11 +28,9 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler();
 app.UseCors();
 
-
 // JWT
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
