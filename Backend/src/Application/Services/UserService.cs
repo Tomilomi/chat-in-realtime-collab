@@ -21,11 +21,10 @@ namespace Application.Services
         }
         
 
-        public async Task RegisterAsync(string userName, string password, Guid pictureId)
+        public async Task RegisterAsync(string userName, string password)
         {
             
-            var picture = await _pictureRepository.GetByIdAsync(pictureId)
-                          ?? await _pictureRepository.GetDefaultAsync();
+            var picture = await _pictureRepository.GetDefaultAsync();
             
             var user = User.Create(userName, password, picture!);
             if (user.IsError) return;
