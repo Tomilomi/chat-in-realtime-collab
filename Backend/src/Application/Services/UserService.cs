@@ -23,12 +23,18 @@ namespace Application.Services
 
         public async Task RegisterAsync(string userName, string password)
         {
-            
             var picture = await _pictureRepository.GetDefaultAsync();
-            
+            Console.WriteLine($"Picture encontrada: {picture?.Id}");
+    
             var user = User.Create(userName, password, picture!);
-            if (user.IsError) return;
+            Console.WriteLine($"User.IsError: {user.IsError}");
+            if (user.IsError)
+            {
+                Console.WriteLine($"Errores: {string.Join(", ", user.Errors)}");
+                return;
+            }
             await _userRepository.AddAsync(user.Value);
+            Console.WriteLine($"Usuario guardado: {user.Value.Username}");
         }
 
         public async Task<User?> LoginAsync(string userName, string password)

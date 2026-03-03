@@ -24,7 +24,9 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequestDTO request)
     {
+        Console.WriteLine($"Registrando: {request.Username}");
         await _userService.RegisterAsync(request.Username, request.Password);
+        Console.WriteLine($"Registro completado");
         return Ok();
     }
 
@@ -32,7 +34,9 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestDTO request)
     {
+        Console.WriteLine($"Login intento: {request.Username} / {request.Password}");
         var user = await _userService.LoginAsync(request.Username, request.Password);
+        Console.WriteLine($"Usuario encontrado: {user?.Username ?? "null"}");
         if (user is null) return Unauthorized();
 
         var token = GenerateJwtToken(user.Id, user.Username);

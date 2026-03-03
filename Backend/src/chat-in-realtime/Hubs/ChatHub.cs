@@ -2,9 +2,11 @@ using Application.Common;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chat_in_realtime.Hubs;
 
+[Authorize]
 public class ChatHub : Hub
 {
     private readonly IMessageService _messageService;
