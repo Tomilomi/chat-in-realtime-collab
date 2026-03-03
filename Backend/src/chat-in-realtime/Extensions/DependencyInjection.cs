@@ -41,8 +41,8 @@ namespace chat_in_realtime.Extensions
 
         public static IServiceCollection AddJWT(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = configuration.GetSection("JwtSettings");
-            var secretKey = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!);
+            var jwtSettings = configuration.GetSection("Jwt");
+            var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
             services.AddAuthentication(options =>
             {
