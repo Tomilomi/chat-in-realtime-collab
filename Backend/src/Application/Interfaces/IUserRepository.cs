@@ -1,10 +1,13 @@
 ﻿using Domain.Entities;
+using ErrorOr;
 
 namespace Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task UpdateAsync(User user);
+
+        Task<IEnumerable<User>> GetAllAsync();
 
         Task<User?> GetByIdAsync(Guid id);
 
