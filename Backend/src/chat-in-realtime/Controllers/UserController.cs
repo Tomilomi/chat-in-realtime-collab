@@ -18,7 +18,7 @@ namespace chat_in_realtime.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _userService.GetAllUsersAsync();
+            var result = await _userService.GetAllAsync();
             return result.Match(
                 users => Ok(users),
                 errors => Problem(errors));

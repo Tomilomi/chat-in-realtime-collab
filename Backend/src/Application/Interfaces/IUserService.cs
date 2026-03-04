@@ -6,7 +6,9 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ErrorOr<GetAllUsersResponseDTO>> GetAllUsersAsync();
+        Task<ErrorOr<Updated>> UpdateAsync();
+
+        Task<ErrorOr<GetAllUsersResponseDTO>> GetAllAsync();
 
         Task<ErrorOr<User>> GetUserByIdAsync(Guid id);
 

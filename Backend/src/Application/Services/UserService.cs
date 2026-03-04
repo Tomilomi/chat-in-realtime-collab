@@ -1,5 +1,4 @@
 ﻿using Application.Common;
-using Application.Common.Users;
 using Application.Extensions;
 using Application.Interfaces;
 using Domain.Entities;
@@ -50,7 +49,7 @@ namespace Application.Services
             return user;
         }
 
-        public async Task<ErrorOr<GetAllUsersResponseDTO>> GetAllUsersAsync()
+        public async Task<ErrorOr<GetAllUsersResponseDTO>> GetAllAsync()
         {
             var users = await _userRepository.GetAllAsync();
             var dtos = users.Select(user => user.ToDto()).ToList();
