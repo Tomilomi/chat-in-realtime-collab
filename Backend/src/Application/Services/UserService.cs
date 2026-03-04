@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Common;
+using Application.Interfaces;
 using Domain.Entities;
 using Domain.Errors;
 using ErrorOr;
@@ -50,6 +51,11 @@ namespace Application.Services
                 return DomainErrors.User.Bussiness.IncorrectPassword;
             }
             return user;
+        }
+
+        public async Task<ErrorOr<GetAllUsersResponseDTO>> GetAllUsersAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
