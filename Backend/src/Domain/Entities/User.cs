@@ -17,7 +17,9 @@ namespace Domain.Entities
         public string Password { get; private set; }
 
         //propiades de navegación para el ORM
-        public Picture Picture { get; private set; }
+        public Guid? PictureId { get; private set; }
+
+        public Picture? Picture { get; private set; }
 
         // public ICollection<Message> SentMessages { get; private set; } = [];
         // public ICollection<Message> ReceivedMessages { get; private set; } = [];
