@@ -30,7 +30,7 @@ public class ChatHub : Hub
 
         //buscarlo en la bd
         //se puede mejorar el manejo de erorres
-        var result = await _userService.GetUserByIdAsync(userId);
+        var result = await _userService.GetByIdAsync(userId);
         if (result.IsError)
         {
             throw new HubException("Usuario no encontrado.");
@@ -85,7 +85,7 @@ public class ChatHub : Hub
     public override async Task OnConnectedAsync()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) throw new HubException("Usuario no encontrado");
 
         _connectedUsers.Add(user.Value.Username);
@@ -97,7 +97,7 @@ public class ChatHub : Hub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (!user.IsError)
         {
             _connectedUsers.Remove(user.Value.Username);
@@ -112,7 +112,7 @@ public class ChatHub : Hub
     public async Task StartTyping()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) return;
 
         await Clients.Others.SendAsync("UserTyping", user.Value.Username);
@@ -121,7 +121,7 @@ public class ChatHub : Hub
     public async Task StopTyping()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) return;
     
         await Clients.Others.SendAsync("UserStoppedTyping", user.Value.Username); // ← esto estaba mal
