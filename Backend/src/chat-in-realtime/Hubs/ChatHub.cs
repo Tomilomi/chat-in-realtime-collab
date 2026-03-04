@@ -13,6 +13,7 @@ public class ChatHub : Hub
     private readonly IMessageService _messageService;
     private readonly IUserService _userService;
     private static readonly HashSet<String> _connectedUsers = [];
+    private const int PageSize = 20;
 
     public ChatHub(IMessageService messageService, IUserService userService)
     {
@@ -61,24 +62,21 @@ public class ChatHub : Hub
         await Clients.All.SendAsync("ReceiveMessage", messageToBroadcast);
     }
 
-    public async Task LoadMessages()
+    public async Task LoadMessages(int page = 0)
     {
-        //traerlos de la bd
-        var pastMessages = await _messageService.GetRecentMessagesAsync(20);
+        var pastMessages = await _messageService.GetMessagesPagedAsync(page, PageSize);
 
-        //mapearlos a dto
         var messagesToLoad = pastMessages.Select(m => new MessageReceivedDTO(
             Id: m.Id,
             Content: m.Content,
             Timestamp: m.Timestamp,
             Sender: new UserSenderDTO(
-                    Id: m.Sender.Id,
-                    Username: m.Sender.Username
-                    )
-                )
-            ).ToList();
+                Id: m.Sender.Id,
+                Username: m.Sender.Username
+            )
+        )).ToList();
 
-        await Clients.Caller.SendAsync("LoadMessages", messagesToLoad);
+        await Clients.Caller.SendAsync("LoadMessages", messagesToLoad, page);
     }
 
 
@@ -125,8 +123,8 @@ public class ChatHub : Hub
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
         var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) return;
-        
-        await Clients.Others.SendAsync("UserTyping", user.Value.Username);
+    
+        await Clients.Others.SendAsync("UserStoppedTyping", user.Value.Username); // ← esto estaba mal
     }
     
     
