@@ -33,9 +33,11 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .AsNoTracking() //evita el seguimiento de las entidades para mejorar el rendimiento
+                .ToListAsync();
         }
     }
 }
