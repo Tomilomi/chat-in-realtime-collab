@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Common.Users;
+using Application.Extensions;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Errors;
@@ -52,13 +53,7 @@ namespace Application.Services
         public async Task<ErrorOr<GetAllUsersResponseDTO>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllUsersAsync();
-            var dtos = users.Select(user =>
-            new GetUserResponseDTO(
-                Id: user.Id,
-                Username: user.Username,
-                PictureId: user.PictureId
-                ))
-                .ToList();
+            var dtos = users.Select(user => user.ToDto()).ToList();
             var result = new GetAllUsersResponseDTO(dtos);
             return result;
         }
