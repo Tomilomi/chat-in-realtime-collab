@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Users;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
@@ -81,6 +82,8 @@ public class ChatHub : Hub
     }
 
 
+    // Users conected log
+    
     public override async Task OnConnectedAsync()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
@@ -104,6 +107,26 @@ public class ChatHub : Hub
             await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
         }
         await base.OnDisconnectedAsync(exception);
+    }
+    
+    // Typing log
+    
+    public async Task StartTyping()
+    {
+        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        if (user.IsError) return;
+
+        await Clients.Others.SendAsync("UserTyping", user.Value.Username);
+    }
+
+    public async Task StopTyping()
+    {
+        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        if (user.IsError) return;
+        
+        await Clients.Others.SendAsync("UserTyping", user.Value.Username);
     }
     
     
