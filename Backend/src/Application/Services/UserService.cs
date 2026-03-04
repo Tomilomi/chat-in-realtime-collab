@@ -52,7 +52,7 @@ namespace Application.Services
 
         public async Task<ErrorOr<GetAllUsersResponseDTO>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllAsync();
             var dtos = users.Select(user => user.ToDto()).ToList();
             var result = new GetAllUsersResponseDTO(dtos);
             return result;
