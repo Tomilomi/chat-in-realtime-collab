@@ -1,8 +1,11 @@
-﻿using Application.Common;
+﻿using System.Security.Claims;
+using Application.Common;
 using Application.Common.Users;
 using Application.Interfaces;
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace chat_in_realtime.Controllers
 {
@@ -24,6 +27,21 @@ namespace chat_in_realtime.Controllers
             return result.Match(
                 users => Ok(users),
                 errors => Problem(errors));
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            string userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            var result = await _userService.GetByIdAsync(Guid.Parse(userIdString));
+            if (result.IsError) return Unauthorized();
+
+            return Ok(new
+            {
+                id = result.Value.Id,
+                username = result.Value.Username
+            });
         }
 
         [HttpPut]
