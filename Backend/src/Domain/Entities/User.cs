@@ -65,9 +65,9 @@ namespace Domain.Entities
             return result;
         }
 
-        private static List<Error> ValidateUsername(string username)
+        private static List<Error> ValidateUsername(string? username)
         {
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return [DomainErrors.User.Validation.UsernameEmpty];
             }
@@ -78,9 +78,9 @@ namespace Domain.Entities
             return [];
         }
 
-        private static List<Error> ValidatePassword(string password)
+        private static List<Error> ValidatePassword(string? password)
         {
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(password))
             {
                 return [DomainErrors.User.Validation.PasswordEmpty];
             }
