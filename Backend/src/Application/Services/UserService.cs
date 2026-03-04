@@ -60,11 +60,14 @@ namespace Application.Services
 
         public async Task<ErrorOr<Updated>> UpdateAsync(Guid id, UserUpdateRequestDTO request)
         {
-            var result = await GetByIdAsync(id);
-            if (result.IsError) return result.Errors;
+            var resultFind = await GetByIdAsync(id);
+            if (resultFind.IsError) return resultFind.Errors;
 
-            var user = result.Value;
-            user.Update(request.Username, request.Password, request.PictureId);
+            var user = resultFind.Value;
+
+            var resultUpdate = user.Update(request.Username, request.Password, request.PictureId);
+            if (resultUpdate.IsError) return resultUpdate.Errors;
+
             await _userRepository.UpdateAsync(user);
             return Result.Updated;
         }
