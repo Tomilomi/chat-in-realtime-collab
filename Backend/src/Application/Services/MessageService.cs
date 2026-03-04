@@ -17,14 +17,14 @@ namespace Application.Services
             return await _messageRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Message>> GetRecentMessagesAsync(int count)
-        {
-            return _messageRepository.GetRecentMessagesAsync(count);
-        }
-
         public async Task SaveMessageAsync(Message message)
         {
             await _messageRepository.AddAsync(message);
+        }
+        
+        public async Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize)
+        {
+            return await _messageRepository.GetMessagesPagedAsync(page, pageSize);
         }
     }
 }

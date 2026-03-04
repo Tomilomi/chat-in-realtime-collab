@@ -21,5 +21,10 @@
             Sender = null!;
             Content = null!;
         }
+        
+        public void ForceTimestamp(DateTime timestamp)
+        {
+            Timestamp = timestamp;
+        }
     }
 }

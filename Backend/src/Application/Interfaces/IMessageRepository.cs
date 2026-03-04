@@ -6,8 +6,8 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<Message>> GetAllAsync();
 
-        Task<IEnumerable<Message>> GetRecentMessagesAsync(int count);
-
         Task AddAsync(Message message);
+        
+        Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize);
     }
 }
