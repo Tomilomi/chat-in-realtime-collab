@@ -1,4 +1,6 @@
-﻿namespace Application.Common
+﻿using Application.Common.Users;
+
+namespace Application.Common
 {
     /// <summary>
     /// Mensaje de salida desde el servidor al cliente, representando un mensaje recibido en el chat.
