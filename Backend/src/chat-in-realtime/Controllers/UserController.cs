@@ -16,7 +16,6 @@ namespace chat_in_realtime.Controllers
         }
 
         [HttpGet]
-        [Route("")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _userService.GetAllUsersAsync();
