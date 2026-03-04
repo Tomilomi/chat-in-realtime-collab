@@ -8,6 +8,7 @@ namespace Application.Interfaces
 
         Task SaveMessageAsync(Message message);
         
+        Task<bool> DeleteMessageAsync(Guid id);
         
         Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize);
     }

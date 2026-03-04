@@ -16,5 +16,9 @@ namespace Application.Interfaces
         Task RegisterAsync(string username, string password);
 
         Task<ErrorOr<User>> LoginAsync(string username, string password);
+        
+        Task<bool> BanAsync(Guid id);
+        
+        Task<bool> UnbanAsync(Guid id);
     }
 }

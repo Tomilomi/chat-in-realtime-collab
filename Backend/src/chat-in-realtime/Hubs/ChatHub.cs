@@ -88,6 +88,8 @@ public class ChatHub : Hub
         var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) throw new HubException("Usuario no encontrado");
 
+        if (user.Value.IsBanned) throw new HubException("Usuario baneado");
+        
         _connectedUsers.Add(user.Value.Username);
         await Clients.All.SendAsync("UserConnected", user.Value.Username);
         await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);

@@ -45,5 +45,25 @@ namespace Infrastructure.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+        
+        public async Task<bool> BanAsync(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is null) return false;
+            user.Ban();
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UnbanAsync(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is null) return false;
+            user.Unban();
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        
+        
     }
 }

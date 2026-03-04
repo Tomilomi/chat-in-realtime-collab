@@ -14,5 +14,8 @@ namespace Application.Interfaces
         Task<User?> GetByUserNameAsync(string username);
 
         Task AddAsync(User user);
+        
+        Task<bool> BanAsync(Guid id);
+        Task<bool> UnbanAsync(Guid id);
     }
 }

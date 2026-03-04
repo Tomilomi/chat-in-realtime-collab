@@ -1,6 +1,7 @@
 ﻿using Domain.Errors;
 using ErrorOr;
 using System.Runtime.CompilerServices;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -16,6 +17,10 @@ namespace Domain.Entities
         public Guid Id { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
+        
+        public UserRole Role { get; private set; }
+        
+        public bool IsBanned { get; private set; }
 
         //propiades de navegación para el ORM
         public Guid? PictureId { get; private set; }
@@ -39,7 +44,14 @@ namespace Domain.Entities
             Username = username;
             Password = password;
             Picture = picture;
+            Role = UserRole.User;
         }
+        
+        public void ChangeRole(UserRole role) => Role = role;
+        
+        public void Ban() => IsBanned = true;
+        
+        public void Unban() => IsBanned = false;
 
         /// <summary>
         /// Creates a new User instance with the specified identifier, username, password, and profile picture.
@@ -109,5 +121,9 @@ namespace Domain.Entities
             }
             return [];
         }
+        
+
     }
+    
+    
 }

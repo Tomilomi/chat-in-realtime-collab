@@ -21,6 +21,11 @@ namespace Application.Services
         {
             await _messageRepository.AddAsync(message);
         }
+
+        public async Task<bool> DeleteMessageAsync(Guid id)
+        {
+            return await _messageRepository.DeleteAsync(id);
+        }
         
         public async Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize)
         {

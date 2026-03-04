@@ -9,5 +9,7 @@ namespace Application.Interfaces
         Task AddAsync(Message message);
         
         Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize);
+        
+        Task<bool> DeleteAsync(Guid id);
     }
 }

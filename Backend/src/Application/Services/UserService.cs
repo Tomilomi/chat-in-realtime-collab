@@ -71,5 +71,19 @@ namespace Application.Services
             await _userRepository.UpdateAsync(user);
             return Result.Updated;
         }
+        
+        
+        public async Task<bool> BanAsync(Guid id)
+        {
+            return await _userRepository.BanAsync(id);
+        }
+
+        public async Task<bool> UnbanAsync(Guid id)
+        {
+            return await _userRepository.UnbanAsync(id);
+        }
+        
+        
+        
     }
 }

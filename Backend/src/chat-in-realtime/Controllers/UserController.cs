@@ -40,8 +40,27 @@ namespace chat_in_realtime.Controllers
             return Ok(new
             {
                 id = result.Value.Id,
-                username = result.Value.Username
+                username = result.Value.Username,
+                role = result.Value.Role.ToString()
             });
+        }
+        
+        [HttpPost("{id}/ban")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Ban(Guid id)
+        {
+            var result = await _userService.BanAsync(id);
+            if (!result) return NotFound();
+            return NoContent();
+        }
+
+        [HttpPost("{id}/unban")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Unban(Guid id)
+        {
+            var result = await _userService.UnbanAsync(id);
+            if (!result) return NotFound();
+            return NoContent();
         }
 
         [HttpPut]

@@ -26,6 +26,15 @@ namespace Infrastructure.Repositories
             await _context.Messages.AddAsync(message);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var message = await _context.Messages.FindAsync(id);
+            if (message is null) return false;
+            _context.Messages.Remove(message);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         
         
         public async Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize)

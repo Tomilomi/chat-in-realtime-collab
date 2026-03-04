@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Common;
+using Domain.Enums;
 
 namespace chat_in_realtime.Controllers;
 
@@ -35,11 +36,11 @@ public class AuthController : ApiController
         if (result.IsError) return Unauthorized();
         var user = result.Value;
 
-        var token = GenerateJwtToken(user.Id, user.Username);
+        var token = GenerateJwtToken(user.Id, user.Username, user.Role);
         return Ok(new { token });
     }
 
-    private string GenerateJwtToken(Guid userId, string username)
+    private string GenerateJwtToken(Guid userId, string username, UserRole role)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -47,7 +48,8 @@ public class AuthController : ApiController
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Name, username)
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Role, role.ToString())
         };
 
         var token = new JwtSecurityToken(
