@@ -11,6 +11,7 @@ public class ChatHub : Hub
 {
     private readonly IMessageService _messageService;
     private readonly IUserService _userService;
+    private static readonly HashSet<String> _connectedUsers = [];
 
     public ChatHub(IMessageService messageService, IUserService userService)
     {
@@ -78,4 +79,32 @@ public class ChatHub : Hub
 
         await Clients.Caller.SendAsync("LoadMessages", messagesToLoad);
     }
+
+
+    public override async Task OnConnectedAsync()
+    {
+        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        if (user.IsError) throw new HubException("Usuario no encontrado");
+
+        _connectedUsers.Add(user.Value.Username);
+        await Clients.All.SendAsync("UserConnected", user.Value.Username);
+        await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
+        await base.OnConnectedAsync();
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        var user = await _userService.GetUserByIdAsync(Guid.Parse(userIdString));
+        if (!user.IsError)
+        {
+            _connectedUsers.Remove(user.Value.Username);
+            await Clients.All.SendAsync("UserDisconnected", user.Value.Username);
+            await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
+        }
+        await base.OnDisconnectedAsync(exception);
+    }
+    
+    
 }
