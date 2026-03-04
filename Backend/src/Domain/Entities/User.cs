@@ -49,7 +49,7 @@ namespace Domain.Entities
         /// <param name="picture">The profile picture to associate with the user. Cannot be null.</param>
         /// <returns>An ErrorOr<User> containing the created User if successful; otherwise, an error describing why the user
         /// could not be created.</returns>
-        public static ErrorOr<User> Create(string username, string password, Picture picture)
+        public static ErrorOr<User> Create(string username, string password, Picture picture) //luego cambiar por pictureId es mas rapido usar la FK
         {
             //validaciones
             List<Error> errors = [];
