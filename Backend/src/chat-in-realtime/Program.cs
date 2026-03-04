@@ -53,12 +53,16 @@ using (var scope = app.Services.CreateScope())
 
     db.Users.AddRange(user1, user2);  // las Pictures se guardan solas
 
-    db.Messages.AddRange(
-        new Message(user1, "Hola! alguien probó el nuevo update?"),
-        new Message(user2, "Sí, está bastante bien!"),
-        new Message(user1, "Me re gustó la nueva sidebar")
-    );
+    var messages = new List<Message>();
+    for (int i = 1; i <= 50; i++)
+    {
+        var sender = i % 2 == 0 ? user1 : user2;
+        var msg = new Message(sender, $"Mensaje de prueba número {i}");
+        msg.ForceTimestamp(DateTime.UtcNow.AddMinutes(-50 + i));
+        messages.Add(msg);
+    }
 
+    db.Messages.AddRange(messages);
     db.SaveChanges();
 }
 
