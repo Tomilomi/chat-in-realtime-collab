@@ -31,6 +31,7 @@ namespace chat_in_realtime.Handlers
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
+            //el true indica que se manejó la excepción
             return true;
         }
     }

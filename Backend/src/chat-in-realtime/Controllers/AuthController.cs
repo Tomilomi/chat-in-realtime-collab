@@ -10,12 +10,12 @@ namespace chat_in_realtime.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class AuthController : ApiController
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
 
-    public UserController(IUserService userService, IConfiguration configuration)
+    public AuthController(IUserService userService, IConfiguration configuration)
     {
         _userService = userService;
         _configuration = configuration;
@@ -24,25 +24,21 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequestDTO request)
     {
-        Console.WriteLine($"Registrando: {request.Username}");
         await _userService.RegisterAsync(request.Username, request.Password);
-        Console.WriteLine($"Registro completado");
         return Ok();
     }
-
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestDTO request)
     {
-        Console.WriteLine($"Login intento: {request.Username} / {request.Password}");
-        var user = await _userService.LoginAsync(request.Username, request.Password);
-        Console.WriteLine($"Usuario encontrado: {user?.Username ?? "null"}");
-        if (user is null) return Unauthorized();
+        var result = await _userService.LoginAsync(request.Username, request.Password);
+        if (result.IsError) return Unauthorized();
+        var user = result.Value;
 
         var token = GenerateJwtToken(user.Id, user.Username);
         return Ok(new { token });
     }
-    
+
     private string GenerateJwtToken(Guid userId, string username)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
@@ -64,6 +60,4 @@ public class UserController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    
-    
 }
