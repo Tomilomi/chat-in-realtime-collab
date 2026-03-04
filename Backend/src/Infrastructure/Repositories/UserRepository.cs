@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
 
         public async Task<User?> GetByUserNameAsync(string userName)
         {
-            return await  _context.Users
+            return await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == userName);
         }
 
@@ -31,6 +31,11 @@ namespace Infrastructure.Repositories
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        public Task<IEnumerable<User>> GetUsersAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
