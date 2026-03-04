@@ -1,5 +1,7 @@
 ﻿using Application.Common;
+using Application.Common.Users;
 using Application.Interfaces;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace chat_in_realtime.Controllers
@@ -25,9 +27,12 @@ namespace chat_in_realtime.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update()
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequestDTO request)
         {
-            throw new NotImplementedException();
+            var result = await _userService.UpdateAsync(id, request);
+            return result.Match(
+                updated => NoContent(),
+                errors => Problem(errors));
         }
     }
 }

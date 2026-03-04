@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Common.Users;
 using Application.Extensions;
 using Application.Interfaces;
 using Domain.Entities;
@@ -18,7 +19,7 @@ namespace Application.Services
             _pictureRepository = pictureRepository;
         }
 
-        public async Task<ErrorOr<User>> GetUserByIdAsync(Guid id)
+        public async Task<ErrorOr<User>> GetByIdAsync(Guid id)
         {
             var result = await _userRepository.GetByIdAsync(id);
             if (result == null) { return DomainErrors.User.NotFound; }
@@ -55,6 +56,11 @@ namespace Application.Services
             var dtos = users.Select(user => user.ToDto()).ToList();
             var result = new GetAllUsersResponseDTO(dtos);
             return result;
+        }
+
+        public async Task<ErrorOr<Updated>> UpdateAsync(Guid id, UserUpdateRequestDTO request)
+        {
+            throw new NotImplementedException();
         }
     }
 }
