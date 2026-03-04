@@ -60,7 +60,13 @@ namespace Application.Services
 
         public async Task<ErrorOr<Updated>> UpdateAsync(Guid id, UserUpdateRequestDTO request)
         {
-            throw new NotImplementedException();
+            var result = await GetByIdAsync(id);
+            if (result.IsError) return result.Errors;
+
+            var user = result.Value;
+            user.Update(request.Username, request.Password, request.PictureId);
+            await _userRepository.UpdateAsync(user);
+            return Result.Updated;
         }
     }
 }
