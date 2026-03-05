@@ -82,7 +82,6 @@ namespace Domain.Entities
         public ErrorOr<Updated> Update(string? newUsername = null,
             string? newPassword = null, Guid? newPictureId = null)
         {
-            //TODO cambiar el temita de la picture y hashear la pw
             List<Error> errors = [];
 
             if (newUsername is not null) errors.AddRange(ValidateUsername(newUsername));
@@ -91,7 +90,7 @@ namespace Domain.Entities
             if (errors is { Count: > 0 }) { return errors; }
 
             Username = newUsername ?? Username;
-            Password = newPassword ?? Password; //todo hashear
+            Password = newPassword ?? Password;
             PictureId = newPictureId ?? PictureId;
 
             return Result.Updated;
