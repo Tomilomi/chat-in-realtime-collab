@@ -3,6 +3,7 @@ using Application.Common.Users;
 using Application.Extensions;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Errors;
 using ErrorOr;
 
@@ -83,6 +84,15 @@ namespace Application.Services
             return await _userRepository.UnbanAsync(id);
         }
         
+        
+        public async Task<bool> ChangeRoleAsync(Guid userId, UserRole role)
+        {
+            var result = await _userRepository.GetByIdAsync(userId);
+            if (result is null) return false;
+            result.ChangeRole(role);
+            await _userRepository.UpdateAsync(result);
+            return true;
+        }
         
         
     }

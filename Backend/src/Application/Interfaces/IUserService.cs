@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.Common.Users;
 using Domain.Entities;
+using Domain.Enums;
 using ErrorOr;
 
 namespace Application.Interfaces
@@ -20,5 +21,7 @@ namespace Application.Interfaces
         Task<bool> BanAsync(Guid id);
         
         Task<bool> UnbanAsync(Guid id);
+        
+        Task<bool> ChangeRoleAsync(Guid userId, UserRole role);
     }
 }
