@@ -62,6 +62,16 @@ namespace chat_in_realtime.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
+        
+        
+        [HttpPost("{id}/role")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequestDTO request)
+        {
+            var result = await _userService.ChangeRoleAsync(id, request.Role);
+            if (!result) return NotFound();
+            return NoContent();
+        }
 
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequestDTO request)
