@@ -23,4 +23,9 @@ public class PictureRepository : IPictureRepository
     {
         return await _context.Pictures.FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<Picture>> GetAllAsync()
+    {
+        return await _context.Pictures.ToListAsync();
+    }
 }

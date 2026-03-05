@@ -2,6 +2,7 @@ using Application.Common;
 using Application.Common.Users;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 
@@ -46,6 +47,9 @@ public class ChatHub : Hub
         //guardar en bd
         await _messageService.SaveMessageAsync(newMessage);
 
+        
+        
+        
         //dto para el hub
         var messageToBroadcast = new MessageReceivedDTO(
             Id: newMessage.Id,
@@ -61,6 +65,8 @@ public class ChatHub : Hub
         //mensaje enviado al hub
         await Clients.All.SendAsync("ReceiveMessage", messageToBroadcast);
     }
+
+    private static readonly Dictionary<string, string> _userConnections = new();
 
     public async Task LoadMessages(int page = 0)
     {
@@ -90,6 +96,7 @@ public class ChatHub : Hub
 
         if (user.Value.IsBanned) throw new HubException("Usuario baneado");
         
+        _userConnections[userIdString] = Context.ConnectionId;
         _connectedUsers.Add(user.Value.Username);
         await Clients.All.SendAsync("UserConnected", user.Value.Username);
         await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
@@ -102,6 +109,7 @@ public class ChatHub : Hub
         var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (!user.IsError)
         {
+            _userConnections.Remove(user.Value.Username);
             _connectedUsers.Remove(user.Value.Username);
             await Clients.All.SendAsync("UserDisconnected", user.Value.Username);
             await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
@@ -127,6 +135,23 @@ public class ChatHub : Hub
         if (user.IsError) return;
     
         await Clients.Others.SendAsync("UserStoppedTyping", user.Value.Username); // ← esto estaba mal
+    }
+    
+    // to kick users
+
+    public async Task KickUser(Guid userId)
+    {
+        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        var caller = await _userService.GetByIdAsync(Guid.Parse(userIdString));
+        if (caller.IsError) throw new HubException("No autorizado");
+        if (caller.Value.Role != UserRole.Admin && caller.Value.Role != UserRole.Moderator)
+            throw new HubException("No tenés permisos para kickear usuarios");
+
+        if (_userConnections.TryGetValue(userId.ToString(), out var connectionId))
+        {
+            await Clients.Client(connectionId).SendAsync("Kicked", "Fuiste kickeado por un moderador");
+            Context.Abort();
+        }
     }
     
     

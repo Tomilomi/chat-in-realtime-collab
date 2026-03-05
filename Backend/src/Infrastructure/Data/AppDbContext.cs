@@ -25,11 +25,11 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Le decimos a EF Core cómo es la relación explícitamente
+            // Le decimos a EF Core cï¿½mo es la relaciï¿½n explï¿½citamente
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Picture)      // Un usuario tiene una foto
-                .WithOne(p => p.User)        // Una foto pertenece a un usuario
-                .HasForeignKey<Picture>(p => p.UserId); // La tabla Picture guarda la Foreign Key
+                .HasOne(u => u.Picture)
+                .WithMany()
+                .HasForeignKey(p => p.PictureId);
         }
     }
 }

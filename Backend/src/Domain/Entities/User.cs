@@ -38,12 +38,13 @@ namespace Domain.Entities
             Picture = null!;
         }
 
-        private User(string username, string password, Picture picture)
+        private User(string username, string password, Picture? picture)
         {
             Id = Guid.NewGuid();
             Username = username;
             Password = password;
             Picture = picture;
+            PictureId = picture?.Id;
             Role = UserRole.User;
         }
         

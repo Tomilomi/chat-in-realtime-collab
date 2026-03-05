@@ -25,6 +25,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseExceptionHandler();
+app.UseStaticFiles();
 app.UseCors();
 
 // JWT
@@ -47,8 +48,10 @@ using (var scope = app.Services.CreateScope())
 
     // SEEDER PARA TESTEAR
 
-    var picture1 = new Picture([], Guid.Empty);
-    var picture2 = new Picture([], Guid.Empty);
+    var picture1 = new Picture("/avatars/avatar1.png");
+    var picture2 = new Picture("/avatars/avatar2.png");
+    var picture3 = new Picture("/avatars/avatar3.png");
+    db.Pictures.Add(picture3);
 
     var user1 = User.Create("Marcos", BCrypt.Net.BCrypt.HashPassword("password123"), picture1).Value;
     user1.ChangeRole(UserRole.Admin);

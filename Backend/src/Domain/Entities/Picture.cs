@@ -4,28 +4,22 @@ namespace Domain.Entities
     public class Picture
     {
         public Guid Id { get; private set; }
-        public byte[] Data { get; private set; }
-
-        // No se si esta bien el tipo de dato
-        // Debe ser un blob en la base de datos
-
-        public Guid UserId { get; private set; }
-
-        //propiedad de navegacion
+        public string Url { get; private set; }
+        
+        // propiedad de navegacion
         public User User { get; private set; }
         
         // Constructores agregados
         
-        public Picture(byte[] data, Guid userId)
+        public Picture(string url)
         {
             Id = Guid.NewGuid();
-            Data = data;
-            UserId = userId;
+            Url = url;
         }
         
         private Picture() 
         {
-            Data = [];
+            Url = null!;
         }
     }
 }
