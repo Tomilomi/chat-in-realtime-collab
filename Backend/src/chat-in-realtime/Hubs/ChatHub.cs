@@ -13,13 +13,15 @@ public class ChatHub : Hub
 {
     private readonly IMessageService _messageService;
     private readonly IUserService _userService;
+    private readonly IChatNotificationService _chatNotificationService;
     private static readonly HashSet<String> _connectedUsers = [];
     private const int PageSize = 20;
 
-    public ChatHub(IMessageService messageService, IUserService userService)
+    public ChatHub(IMessageService messageService, IUserService userService, IChatNotificationService chatNotificationService)
     {
         _messageService = messageService;
         _userService = userService;
+        _chatNotificationService = chatNotificationService;
     }
 
     public async Task SendMessage(SendMessageDTO messageIn)
@@ -66,7 +68,7 @@ public class ChatHub : Hub
         await Clients.All.SendAsync("ReceiveMessage", messageToBroadcast);
     }
 
-    private static readonly Dictionary<string, string> _userConnections = new();
+    public static readonly Dictionary<string, string> UserConnections = new();
 
     public async Task LoadMessages(int page = 0)
     {
@@ -96,7 +98,7 @@ public class ChatHub : Hub
 
         if (user.Value.IsBanned) throw new HubException("Usuario baneado");
         
-        _userConnections[userIdString] = Context.ConnectionId;
+        UserConnections[userIdString] = Context.ConnectionId;
         _connectedUsers.Add(user.Value.Username);
         await Clients.All.SendAsync("UserConnected", user.Value.Username);
         await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
@@ -109,7 +111,7 @@ public class ChatHub : Hub
         var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (!user.IsError)
         {
-            _userConnections.Remove(user.Value.Username);
+            UserConnections.Remove(user.Value.Username);
             _connectedUsers.Remove(user.Value.Username);
             await Clients.All.SendAsync("UserDisconnected", user.Value.Username);
             await Clients.All.SendAsync("UpdateConnectedUsers", _connectedUsers);
@@ -147,11 +149,7 @@ public class ChatHub : Hub
         if (caller.Value.Role != UserRole.Admin && caller.Value.Role != UserRole.Moderator)
             throw new HubException("No tenés permisos para kickear usuarios");
 
-        if (_userConnections.TryGetValue(userId.ToString(), out var connectionId))
-        {
-            await Clients.Client(connectionId).SendAsync("Kicked", "Fuiste kickeado por un moderador");
-            Context.Abort();
-        }
+        await _chatNotificationService.KickUserAsync(userId.ToString(), "Fuiste kickeado por un moderador");
     }
     
     

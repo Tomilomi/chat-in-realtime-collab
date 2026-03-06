@@ -21,6 +21,7 @@ namespace Infrastructure.Extensions
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddScoped<IPictureService, PictureService>();
+            
             return services;
         }
     }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Application.Interfaces;
+using chat_in_realtime.Notifications;
 
 namespace chat_in_realtime.Extensions
 {
@@ -62,6 +64,9 @@ namespace chat_in_realtime.Extensions
             // Manejo global de excepciones
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+            
+            // notifications
+            services.AddScoped<IChatNotificationService, ChatNotificationService>();
 
             return services;
         }

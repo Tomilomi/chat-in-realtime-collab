@@ -13,11 +13,14 @@ namespace Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPictureRepository _pictureRepository;
+        private readonly IChatNotificationService _chatNotificationService;
+        
 
-        public UserService(IUserRepository userRepository, IPictureRepository pictureRepository)
+        public UserService(IUserRepository userRepository, IPictureRepository pictureRepository, IChatNotificationService chatNotificationService)
         {
             _userRepository = userRepository;
             _pictureRepository = pictureRepository;
+            _chatNotificationService = chatNotificationService;
         }
 
         public async Task<ErrorOr<User>> GetByIdAsync(Guid id)
@@ -76,7 +79,12 @@ namespace Application.Services
         
         public async Task<bool> BanAsync(Guid id)
         {
-            return await _userRepository.BanAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user is null) return false;
+            user.Ban();
+            await _userRepository.UpdateAsync(user);
+            await _chatNotificationService.KickUserAsync(id.ToString(), "Fuiste baneado por un administrador");
+            return true;
         }
 
         public async Task<bool> UnbanAsync(Guid id)
