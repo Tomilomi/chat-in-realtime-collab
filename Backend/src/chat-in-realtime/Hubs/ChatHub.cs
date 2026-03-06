@@ -15,6 +15,7 @@ public class ChatHub : Hub
     private readonly IUserService _userService;
     private readonly IChatNotificationService _chatNotificationService;
     private static readonly HashSet<String> _connectedUsers = [];
+    private static readonly Dictionary<string, DateTime> _lastMessageTime = new();
     private const int PageSize = 20;
 
     public ChatHub(IMessageService messageService, IUserService userService, IChatNotificationService chatNotificationService)
@@ -26,10 +27,20 @@ public class ChatHub : Hub
 
     public async Task SendMessage(SendMessageDTO messageIn)
     {
+        if (string.IsNullOrWhiteSpace(messageIn.Content))
+            throw new HubException("El mensaje no puede estar vacío");
+        
         //identificar el usuario
         // NECESITA JWT
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
         Guid userId = Guid.Parse(userIdString);
+        
+        if (_lastMessageTime.TryGetValue(userIdString, out var lastTime))
+        {
+            if ((DateTime.UtcNow - lastTime).TotalSeconds < 1)
+                throw new HubException("Estás enviando mensajes muy rápido");
+        }
+        _lastMessageTime[userIdString] = DateTime.UtcNow;
 
         //buscarlo en la bd
         //se puede mejorar el manejo de erorres
@@ -60,7 +71,8 @@ public class ChatHub : Hub
             Sender: new UserSenderDTO
             (
                 Id: user.Id,
-                Username: user.Username
+                Username: user.Username,
+                PictureUrl: user.Picture?.Url
             )
 
         );
@@ -80,7 +92,8 @@ public class ChatHub : Hub
             Timestamp: m.Timestamp,
             Sender: new UserSenderDTO(
                 Id: m.Sender.Id,
-                Username: m.Sender.Username
+                Username: m.Sender.Username,
+                PictureUrl: m.Sender.Picture?.Url
             )
         )).ToList();
 
