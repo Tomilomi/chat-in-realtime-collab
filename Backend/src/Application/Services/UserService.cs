@@ -103,5 +103,11 @@ namespace Application.Services
         }
         
         
+        public async Task<ErrorOr<IEnumerable<UserProfileDTO>>> GetAllProfilesAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+            return users.Select(u => new UserProfileDTO(u.Username, u.Picture?.Url)).ToList();
+        }
+        
     }
 }

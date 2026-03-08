@@ -23,5 +23,7 @@ namespace Application.Interfaces
         Task<bool> UnbanAsync(Guid id);
         
         Task<bool> ChangeRoleAsync(Guid userId, UserRole role);
+        
+        Task<ErrorOr<IEnumerable<UserProfileDTO>>> GetAllProfilesAsync();
     }
 }

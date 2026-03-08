@@ -36,6 +36,7 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users
+                .Include(u => u.Picture)
                 .AsNoTracking() //evita el seguimiento de las entidades para mejorar el rendimiento
                 .ToListAsync();
         }
