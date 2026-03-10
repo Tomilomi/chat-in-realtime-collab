@@ -1,4 +1,4 @@
-using Application.Common;
+using Application.Common.Auth;
 using Application.Interfaces.Users;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;

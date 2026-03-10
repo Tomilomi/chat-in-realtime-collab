@@ -1,4 +1,4 @@
-﻿using Application.Common;
+﻿using Application.Common.Auth;
 using chat_in_realtime.Extensions;
 using Domain.Errors;
 using FluentValidation;
