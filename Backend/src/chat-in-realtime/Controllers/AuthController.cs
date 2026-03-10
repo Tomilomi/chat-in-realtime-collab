@@ -10,13 +10,11 @@ namespace chat_in_realtime.Controllers;
 public class AuthController : ApiController
 {
     private readonly IUserService _userService;
-    private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
 
-    public AuthController(IUserService userService, IConfiguration configuration, ITokenService tokenService)
+    public AuthController(IUserService userService, ITokenService tokenService)
     {
         _userService = userService;
-        _configuration = configuration;
         _tokenService = tokenService;
     }
 
