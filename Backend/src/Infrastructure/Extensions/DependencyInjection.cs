@@ -1,4 +1,6 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Message;
+using Application.Interfaces.Picture;
+using Application.Interfaces.User;
 using Application.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;

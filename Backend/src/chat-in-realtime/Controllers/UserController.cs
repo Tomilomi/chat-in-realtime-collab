@@ -1,10 +1,9 @@
 ﻿using System.Security.Claims;
 using Application.Common;
 using Application.Common.Users;
-using Application.Interfaces;
+using Application.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace chat_in_realtime.Controllers
 {
@@ -44,7 +43,7 @@ namespace chat_in_realtime.Controllers
                 role = result.Value.Role.ToString()
             });
         }
-        
+
         [HttpPost("{id}/ban")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ban(Guid id)
@@ -62,8 +61,7 @@ namespace chat_in_realtime.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
-        
-        
+
         [HttpPost("{id}/role")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(Guid id, [FromBody] ChangeRoleRequestDTO request)

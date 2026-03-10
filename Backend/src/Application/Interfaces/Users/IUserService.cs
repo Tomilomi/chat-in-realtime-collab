@@ -4,7 +4,7 @@ using Domain.Entities;
 using Domain.Enums;
 using ErrorOr;
 
-namespace Application.Interfaces
+namespace Application.Interfaces.User
 {
     public interface IUserService
     {

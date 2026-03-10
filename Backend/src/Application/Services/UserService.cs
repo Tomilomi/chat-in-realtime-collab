@@ -2,6 +2,8 @@
 using Application.Common.Users;
 using Application.Extensions;
 using Application.Interfaces;
+using Application.Interfaces.Picture;
+using Application.Interfaces.User;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Errors;

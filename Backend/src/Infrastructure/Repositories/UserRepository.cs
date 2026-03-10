@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.User;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +46,7 @@ namespace Infrastructure.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
-        
+
         public async Task<bool> BanAsync(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -64,7 +64,5 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-        
-        
     }
 }

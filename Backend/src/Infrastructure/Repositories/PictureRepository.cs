@@ -1,4 +1,4 @@
-using Application.Interfaces;
+using Application.Interfaces.Picture;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

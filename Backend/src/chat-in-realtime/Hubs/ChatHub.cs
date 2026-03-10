@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
+using Application.Interfaces.User;
 
 namespace chat_in_realtime.Hubs;
 
@@ -29,12 +30,12 @@ public class ChatHub : Hub
     {
         if (string.IsNullOrWhiteSpace(messageIn.Content))
             throw new HubException("El mensaje no puede estar vacío");
-        
+
         //identificar el usuario
         // NECESITA JWT
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
         Guid userId = Guid.Parse(userIdString);
-        
+
         if (_lastMessageTime.TryGetValue(userIdString, out var lastTime))
         {
             if ((DateTime.UtcNow - lastTime).TotalSeconds < 1)
@@ -60,9 +61,6 @@ public class ChatHub : Hub
         //guardar en bd
         await _messageService.SaveMessageAsync(newMessage);
 
-        
-        
-        
         //dto para el hub
         var messageToBroadcast = new MessageReceivedDTO(
             Id: newMessage.Id,
@@ -100,9 +98,8 @@ public class ChatHub : Hub
         await Clients.Caller.SendAsync("LoadMessages", messagesToLoad, page);
     }
 
-
     // Users conected log
-    
+
     public override async Task OnConnectedAsync()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
@@ -110,7 +107,7 @@ public class ChatHub : Hub
         if (user.IsError) throw new HubException("Usuario no encontrado");
 
         if (user.Value.IsBanned) throw new HubException("Usuario baneado");
-        
+
         UserConnections[userIdString] = Context.ConnectionId;
         _connectedUsers.Add(user.Value.Username);
         await Clients.All.SendAsync("UserConnected", user.Value.Username);
@@ -131,9 +128,9 @@ public class ChatHub : Hub
         }
         await base.OnDisconnectedAsync(exception);
     }
-    
+
     // Typing log
-    
+
     public async Task StartTyping()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
@@ -148,10 +145,10 @@ public class ChatHub : Hub
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
         var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
         if (user.IsError) return;
-    
+
         await Clients.Others.SendAsync("UserStoppedTyping", user.Value.Username); // ← esto estaba mal
     }
-    
+
     // to kick users
 
     public async Task KickUser(Guid userId)
@@ -164,6 +161,4 @@ public class ChatHub : Hub
 
         await _chatNotificationService.KickUserAsync(userId.ToString(), "Fuiste kickeado por un moderador");
     }
-    
-    
 }

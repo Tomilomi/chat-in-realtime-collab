@@ -1,11 +1,11 @@
-using Application.Interfaces;
+using Application.Common;
+using Application.Interfaces.User;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Application.Common;
-using Domain.Enums;
 
 namespace chat_in_realtime.Controllers;
 
