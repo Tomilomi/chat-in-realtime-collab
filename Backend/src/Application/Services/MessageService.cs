@@ -1,5 +1,5 @@
 using Application.Interfaces;
-using Application.Interfaces.Message;
+using Application.Interfaces.Messages;
 using Domain.Entities;
 
 namespace Application.Services

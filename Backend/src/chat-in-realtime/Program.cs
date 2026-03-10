@@ -6,7 +6,6 @@ using Infrastructure.Extensions;
 using chat_in_realtime.Extensions;
 using Domain.Enums;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 //add layer services

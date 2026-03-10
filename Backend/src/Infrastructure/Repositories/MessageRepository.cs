@@ -1,4 +1,4 @@
-using Application.Interfaces.Message;
+using Application.Interfaces.Messages;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +35,7 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-        
-        
+
         public async Task<IEnumerable<Message>> GetMessagesPagedAsync(int page, int pageSize)
         {
             var messages = await _context.Messages

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.User;
+﻿using Application.Interfaces.Users;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

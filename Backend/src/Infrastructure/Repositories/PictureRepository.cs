@@ -1,4 +1,4 @@
-using Application.Interfaces.Picture;
+using Application.Interfaces.Pictures;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories;
 public class PictureRepository : IPictureRepository
 {
     private readonly AppDbContext _context;
-    
+
     public PictureRepository(AppDbContext context)
     {
         _context = context;

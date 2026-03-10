@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Application.Interfaces.Message
+namespace Application.Interfaces.Messages
 {
     public interface IMessageRepository
     {

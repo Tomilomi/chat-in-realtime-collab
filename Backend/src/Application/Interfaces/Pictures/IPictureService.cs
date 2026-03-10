@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Application.Interfaces.Picture;
+namespace Application.Interfaces.Pictures;
 
 public interface IPictureService
 {

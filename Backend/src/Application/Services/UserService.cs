@@ -2,8 +2,8 @@
 using Application.Common.Users;
 using Application.Extensions;
 using Application.Interfaces;
-using Application.Interfaces.Picture;
-using Application.Interfaces.User;
+using Application.Interfaces.Pictures;
+using Application.Interfaces.Users;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Errors;
@@ -16,7 +16,6 @@ namespace Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IPictureRepository _pictureRepository;
         private readonly IChatNotificationService _chatNotificationService;
-        
 
         public UserService(IUserRepository userRepository, IPictureRepository pictureRepository, IChatNotificationService chatNotificationService)
         {
@@ -77,8 +76,7 @@ namespace Application.Services
             await _userRepository.UpdateAsync(user);
             return Result.Updated;
         }
-        
-        
+
         public async Task<bool> BanAsync(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id);
@@ -93,8 +91,7 @@ namespace Application.Services
         {
             return await _userRepository.UnbanAsync(id);
         }
-        
-        
+
         public async Task<bool> ChangeRoleAsync(Guid userId, UserRole role)
         {
             var result = await _userRepository.GetByIdAsync(userId);
@@ -103,13 +100,11 @@ namespace Application.Services
             await _userRepository.UpdateAsync(result);
             return true;
         }
-        
-        
+
         public async Task<ErrorOr<IEnumerable<UserProfileDTO>>> GetAllProfilesAsync()
         {
             var users = await _userRepository.GetAllAsync();
             return users.Select(u => new UserProfileDTO(u.Username, u.Picture?.Url)).ToList();
         }
-        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Common;
 using Application.Common.Users;
-using Application.Interfaces.User;
+using Application.Interfaces.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

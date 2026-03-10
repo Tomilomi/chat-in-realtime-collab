@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using ErrorOr;
 
-namespace Application.Interfaces.User
+namespace Application.Interfaces.Users
 {
     public interface IUserRepository
     {
@@ -14,8 +14,9 @@ namespace Application.Interfaces.User
         Task<User?> GetByUserNameAsync(string username);
 
         Task AddAsync(User user);
-        
+
         Task<bool> BanAsync(Guid id);
+
         Task<bool> UnbanAsync(Guid id);
     }
 }

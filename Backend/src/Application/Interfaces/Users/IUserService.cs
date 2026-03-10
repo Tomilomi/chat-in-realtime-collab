@@ -4,7 +4,7 @@ using Domain.Entities;
 using Domain.Enums;
 using ErrorOr;
 
-namespace Application.Interfaces.User
+namespace Application.Interfaces.Users
 {
     public interface IUserService
     {
@@ -17,13 +17,13 @@ namespace Application.Interfaces.User
         Task RegisterAsync(string username, string password);
 
         Task<ErrorOr<User>> LoginAsync(string username, string password);
-        
+
         Task<bool> BanAsync(Guid id);
-        
+
         Task<bool> UnbanAsync(Guid id);
-        
+
         Task<bool> ChangeRoleAsync(Guid userId, UserRole role);
-        
+
         Task<ErrorOr<IEnumerable<UserProfileDTO>>> GetAllProfilesAsync();
     }
 }

@@ -1,6 +1,6 @@
-﻿using Application.Interfaces.Message;
-using Application.Interfaces.Picture;
-using Application.Interfaces.User;
+﻿using Application.Interfaces.Messages;
+using Application.Interfaces.Pictures;
+using Application.Interfaces.Users;
 using Application.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -23,7 +23,7 @@ namespace Infrastructure.Extensions
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddScoped<IPictureService, PictureService>();
-            
+
             return services;
         }
     }

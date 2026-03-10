@@ -1,5 +1,5 @@
 using Application.Common;
-using Application.Interfaces.User;
+using Application.Interfaces.Users;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

@@ -5,7 +5,8 @@ using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
-using Application.Interfaces.User;
+using Application.Interfaces.Users;
+using Application.Interfaces.Messages;
 
 namespace chat_in_realtime.Hubs;
 

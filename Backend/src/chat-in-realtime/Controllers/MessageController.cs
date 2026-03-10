@@ -1,10 +1,9 @@
-using Application.Interfaces;
+using Application.Interfaces.Messages;
 
 namespace chat_in_realtime.Controllers;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,7 +17,6 @@ public class MessageController : ApiController
         _messageService = messageService;
     }
 
-
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin, Moderator")]
     public async Task<IActionResult> Delete(Guid id)
@@ -27,6 +25,4 @@ public class MessageController : ApiController
         if (!result) return NotFound();
         return NoContent();
     }
-    
-    
 }

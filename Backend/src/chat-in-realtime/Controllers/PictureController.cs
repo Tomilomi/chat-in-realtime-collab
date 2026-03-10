@@ -1,5 +1,5 @@
 using Application.Common;
-using Application.Interfaces.Picture;
+using Application.Interfaces.Pictures;
 using Microsoft.AspNetCore.Mvc;
 
 namespace chat_in_realtime.Controllers;
