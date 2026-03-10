@@ -1,11 +1,7 @@
 using Application.Common.Auth;
+using Application.Interfaces;
 using Application.Interfaces.Users;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace chat_in_realtime.Controllers;
 
@@ -15,11 +11,13 @@ public class AuthController : ApiController
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
+    private readonly ITokenService _tokenService;
 
-    public AuthController(IUserService userService, IConfiguration configuration)
+    public AuthController(IUserService userService, IConfiguration configuration, ITokenService tokenService)
     {
         _userService = userService;
         _configuration = configuration;
+        _tokenService = tokenService;
     }
 
     [HttpPost("register")]
@@ -32,34 +30,19 @@ public class AuthController : ApiController
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestDTO request)
     {
-        var result = await _userService.LoginAsync(request.Username, request.Password);
-        if (result.IsError) return Unauthorized();
-        var user = result.Value;
+        var resultLogin = await _userService.LoginAsync(request.Username, request.Password);
+        if (resultLogin.IsError) return Unauthorized();
+        var user = resultLogin.Value;
 
-        var token = GenerateJwtToken(user.Id, user.Username, user.Role);
-        return Ok(new { token });
-    }
+        var tokenRequest = new GenerateTokenRequestDTO(
+            UserId: user.Id,
+            Username: user.Username,
+            Role: user.Role);
 
-    private string GenerateJwtToken(Guid userId, string username, UserRole role)
-    {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var resultToken = _tokenService.GenerateToken(tokenRequest);
 
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, role.ToString())
-        };
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
-            signingCredentials: credentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return resultToken.Match(
+            token => Ok(token),
+            errors => Problem(errors));
     }
 }
