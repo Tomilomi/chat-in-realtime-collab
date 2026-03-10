@@ -3,7 +3,7 @@ using chat_in_realtime.Extensions;
 using Domain.Errors;
 using FluentValidation;
 
-namespace chat_in_realtime.Validators
+namespace Application.Validators
 {
     public class SendMessageDTOValidator : AbstractValidator<SendMessageDTO>
     {
