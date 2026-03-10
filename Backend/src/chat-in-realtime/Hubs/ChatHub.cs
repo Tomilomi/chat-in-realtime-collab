@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces.Users;
 using Application.Interfaces.Messages;
+using FluentValidation;
+using ErrorOr;
 
 namespace chat_in_realtime.Hubs;
 
@@ -16,53 +18,39 @@ public class ChatHub : Hub
     private readonly IMessageService _messageService;
     private readonly IUserService _userService;
     private readonly IChatNotificationService _chatNotificationService;
+    private readonly IValidator<SendMessageDTO> _messageValidator;
     private static readonly HashSet<String> _connectedUsers = [];
     private static readonly Dictionary<string, DateTime> _lastMessageTime = new();
     private const int PageSize = 20;
 
-    public ChatHub(IMessageService messageService, IUserService userService, IChatNotificationService chatNotificationService)
+    public ChatHub(IMessageService messageService,
+        IUserService userService, IChatNotificationService chatNotificationService,
+        IValidator<SendMessageDTO> messageValidator)
     {
         _messageService = messageService;
         _userService = userService;
         _chatNotificationService = chatNotificationService;
+        _messageValidator = messageValidator;
     }
 
-    public async Task SendMessage(SendMessageDTO messageIn)
+    public async Task<ErrorOr<Success>> SendMessage(SendMessageDTO messageIn)
     {
-        if (string.IsNullOrWhiteSpace(messageIn.Content))
-            throw new HubException("El mensaje no puede estar vacío");
-
         //identificar el usuario
         // NECESITA JWT
-        string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
+        string userIdString = Context.UserIdentifier!;
         Guid userId = Guid.Parse(userIdString);
 
-        if (_lastMessageTime.TryGetValue(userIdString, out var lastTime))
-        {
-            if ((DateTime.UtcNow - lastTime).TotalSeconds < 1)
-                throw new HubException("Estás enviando mensajes muy rápido");
-        }
-        _lastMessageTime[userIdString] = DateTime.UtcNow;
+        //obtener usuario
+        var userResult = await _userService.GetByIdAsync(userId);
+        if (userResult.IsError) return userResult.Errors;
 
-        //buscarlo en la bd
-        //se puede mejorar el manejo de erorres
-        var result = await _userService.GetByIdAsync(userId);
-        if (result.IsError)
-        {
-            throw new HubException("Usuario no encontrado.");
-        }
+        var user = userResult.Value;
 
-        var user = result.Value;
-        //entidad para la bd
-        var newMessage = new Message(
-            sender: user,
-            content: messageIn.Content
-            );
-
-        //guardar en bd
+        //crear y guardar mensaje
+        var newMessage = new Message(sender: user, content: messageIn.Content);
         await _messageService.SaveMessageAsync(newMessage);
 
-        //dto para el hub
+        //mapear y transmitir
         var messageToBroadcast = new MessageReceivedDTO(
             Id: newMessage.Id,
             Content: newMessage.Content,
@@ -75,8 +63,11 @@ public class ChatHub : Hub
             )
 
         );
+
         //mensaje enviado al hub
         await Clients.All.SendAsync("ReceiveMessage", messageToBroadcast);
+
+        return Result.Success;
     }
 
     public static readonly Dictionary<string, string> UserConnections = new();
@@ -144,22 +135,28 @@ public class ChatHub : Hub
     public async Task StopTyping()
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var user = await _userService.GetByIdAsync(Guid.Parse(userIdString));
-        if (user.IsError) return;
+        var userResult = await _userService.GetByIdAsync(Guid.Parse(userIdString));
+        if (userResult.IsError) return;
 
-        await Clients.Others.SendAsync("UserStoppedTyping", user.Value.Username); // ← esto estaba mal
+        var user = userResult.Value;
+        await Clients.Others.SendAsync("UserStoppedTyping", user.Username); // ← esto estaba mal
     }
 
     // to kick users
 
-    public async Task KickUser(Guid userId)
+    public async Task<ErrorOr<Success>> KickUser(Guid userId)
     {
         string userIdString = Context.UserIdentifier ?? throw new HubException("No autorizado");
-        var caller = await _userService.GetByIdAsync(Guid.Parse(userIdString));
-        if (caller.IsError) throw new HubException("No autorizado");
-        if (caller.Value.Role != UserRole.Admin && caller.Value.Role != UserRole.Moderator)
-            throw new HubException("No tenés permisos para kickear usuarios");
+        var callerResult = await _userService.GetByIdAsync(Guid.Parse(userIdString));
+        if (callerResult.IsError) return callerResult.Errors;
+
+        var caller = callerResult.Value;
+
+        if (caller.Role != UserRole.Admin && caller.Role != UserRole.Moderator)
+            return Error.Unauthorized("Chat.Permission", "No tenes permisos para kickear usuarios");
 
         await _chatNotificationService.KickUserAsync(userId.ToString(), "Fuiste kickeado por un moderador");
+
+        return Result.Success;
     }
 }

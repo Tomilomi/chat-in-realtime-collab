@@ -2,6 +2,8 @@
 using Application.Interfaces.Messages;
 using Application.Interfaces.Users;
 using Application.Services;
+using Application.Validators;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Extensions
@@ -14,6 +16,7 @@ namespace Application.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddValidatorsFromAssemblyContaining<SendMessageDTOValidator>();
             return services;
         }
     }

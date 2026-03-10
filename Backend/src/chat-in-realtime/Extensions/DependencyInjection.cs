@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Application.Interfaces;
 using chat_in_realtime.Notifications;
+using Microsoft.AspNetCore.SignalR;
+using chat_in_realtime.Hubs.Filters;
 
 namespace chat_in_realtime.Extensions
 {
@@ -59,12 +61,16 @@ namespace chat_in_realtime.Extensions
             });
 
             // SignalR
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.AddFilter<RateLimitingFilter>();
+                options.AddFilter<ErrorHandlingFilter>();
+            });
 
             // Manejo global de excepciones
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
-            
+
             // notifications
             services.AddScoped<IChatNotificationService, ChatNotificationService>();
 
