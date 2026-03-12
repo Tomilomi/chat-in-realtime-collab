@@ -40,7 +40,7 @@ public class AuthController : ApiController
         var resultToken = _tokenService.GenerateToken(tokenRequest);
 
         return resultToken.Match(
-            token => Ok(token),
+            token => Ok(new{ token }),
             errors => Problem(errors));
     }
 }
