@@ -28,4 +28,9 @@ public class ChatNotificationService : IChatNotificationService
             Console.WriteLine("No se encontró la conexión");
         }
     }
+    
+    public async Task NotifyMessageDeletedAsync(Guid messageId)
+    {
+        await _hubContext.Clients.All.SendAsync("MessageDeleted", messageId);
+    }
 }

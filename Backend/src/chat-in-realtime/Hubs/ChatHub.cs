@@ -66,6 +66,9 @@ public class ChatHub : Hub
 
         //mensaje enviado al hub
         await Clients.All.SendAsync("ReceiveMessage", messageToBroadcast);
+        
+        
+        await Clients.Others.SendAsync("UserStoppedTyping", user.Username);
 
         return Result.Success;
     }
