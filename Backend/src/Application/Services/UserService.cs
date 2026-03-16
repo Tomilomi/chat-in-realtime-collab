@@ -70,10 +70,22 @@ namespace Application.Services
 
             var user = resultFind.Value;
 
-            var resultUpdate = user.Update(request.Username, request.Password, request.PictureId);
+            Picture? picture = null;
+            if (request.PictureId.HasValue)
+            {
+                picture = await _pictureRepository.GetByIdAsync(request.PictureId.Value);
+                if (picture == null) return Error.NotFound("Picture.NotFound", "Picture not found");
+            }
+
+            var hashedPassword = request.Password != null
+                ? BCrypt.Net.BCrypt.HashPassword(request.Password)
+                : null;
+
+            var resultUpdate = user.Update(request.Username, hashedPassword, picture);
             if (resultUpdate.IsError) return resultUpdate.Errors;
 
             await _userRepository.UpdateAsync(user);
+            await _chatNotificationService.NotifyUserUpdatedAsync(user.Id, user.Username, user.Picture?.Url);
             return Result.Updated;
         }
 

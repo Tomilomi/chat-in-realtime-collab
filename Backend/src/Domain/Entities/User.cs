@@ -79,7 +79,7 @@ namespace Domain.Entities
         }
 
         public ErrorOr<Updated> Update(string? newUsername = null,
-            string? newPassword = null, Guid? newPictureId = null)
+            string? newPassword = null, Picture? newPicture = null)
         {
             List<Error> errors = [];
 
@@ -90,7 +90,11 @@ namespace Domain.Entities
 
             Username = newUsername ?? Username;
             Password = newPassword ?? Password;
-            PictureId = newPictureId ?? PictureId;
+            if (newPicture is not null)
+            {
+                Picture = newPicture;
+                PictureId = newPicture.Id;
+            }
 
             return Result.Updated;
         }

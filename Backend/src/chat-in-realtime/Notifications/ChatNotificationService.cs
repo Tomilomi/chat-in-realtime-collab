@@ -33,4 +33,9 @@ public class ChatNotificationService : IChatNotificationService
     {
         await _hubContext.Clients.All.SendAsync("MessageDeleted", messageId);
     }
+    
+    public async Task NotifyUserUpdatedAsync(Guid userId, string? username, string? pictureUrl)
+    {
+        await _hubContext.Clients.All.SendAsync("UserUpdated", new { userId, username, pictureUrl });
+    }
 }
