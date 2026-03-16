@@ -81,7 +81,7 @@ namespace chat_in_realtime.Controllers
                 errors => Problem(errors));
         }
 
-        [HttpPut("me")]
+        [HttpPatch("me")]
         [Authorize]
         public async Task<IActionResult> UpdateMe([FromBody] UserUpdateRequestDTO request)
         {
