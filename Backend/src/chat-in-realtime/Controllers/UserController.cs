@@ -92,7 +92,7 @@ namespace chat_in_realtime.Controllers
                 errors => Problem(errors));
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequestDTO request)
         {
