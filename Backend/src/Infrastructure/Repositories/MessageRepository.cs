@@ -40,6 +40,7 @@ namespace Infrastructure.Repositories
         {
             var messages = await _context.Messages
                 .Include(m => m.Sender)
+                .ThenInclude(u => u.Picture)
                 .OrderByDescending(m => m.Timestamp)
                 .Skip(page * pageSize)
                 .Take(pageSize)

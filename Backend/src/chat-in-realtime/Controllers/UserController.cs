@@ -40,7 +40,8 @@ namespace chat_in_realtime.Controllers
             {
                 id = result.Value.Id,
                 username = result.Value.Username,
-                role = result.Value.Role.ToString()
+                role = result.Value.Role.ToString(),
+                pictureUrl = result.Value.Picture?.Url
             });
         }
 
