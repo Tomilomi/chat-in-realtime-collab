@@ -1,88 +1,47 @@
-<div align="center">
+# Chat in Real Time
 
-# 💬 Chat in Real Time
-
-A full-featured real-time chat backend with authentication, moderation tools, and live events.
+Real-time chat backend built with ASP.NET Core and SignalR. Started as a learning project and grew into something with a decent set of features.
 
 [![.NET](https://img.shields.io/badge/.NET_8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet)
-[![SignalR](https://img.shields.io/badge/SignalR-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/signalr)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Entity Framework](https://img.shields.io/badge/Entity_Framework_Core_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://docs.microsoft.com/en-us/ef/core/)
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![BCrypt](https://img.shields.io/badge/BCrypt-00599C?style=for-the-badge&logo=letsencrypt&logoColor=white)](https://github.com/BcryptNet/bcrypt.net)
-
-</div>
+[![SignalR](https://img.shields.io/badge/SignalR-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/signalr)
 
 ---
 
-## ✨ Features
+## What it does
 
-- 🔐 **JWT Authentication** — Secure login and registration with BCrypt password hashing
-- ⚡ **Real-time messaging** via SignalR WebSockets
-- 📜 **Paginated message history** — Load previous messages on scroll
-- 🟢 **Connected users indicator** — See who's online in real time
-- ✍️ **Typing indicator** — Know when someone is typing
-- 🔔 **Join/leave notifications** — Get notified when users connect or disconnect
-- 🛡️ **Role-based access control** — User, Moderator, and Admin roles
-- 🚫 **Ban system** — Ban users with instant real-time kick
-- 👢 **Kick system** — Moderators can kick users from the chat in real time
-- 🗑️ **Message moderation** — Delete messages with real-time removal for all clients
-- 🎭 **Avatar system** — Choose from predefined profile pictures served as static files
-- 🔄 **Live profile updates** — Username and avatar changes reflect instantly in the chat
-- 📋 **Clean Architecture** — Domain, Application, Infrastructure, and Presentation layers
+- Register and login with JWT authentication and BCrypt password hashing
+- Real-time messaging via SignalR WebSockets
+- Paginated message history — loads previous messages as you scroll up
+- Typing indicator and online users list
+- Join/leave notifications
+- Role system: User, Moderator, Admin
+- Admins can ban users — if they're connected, they get kicked instantly
+- Moderators and Admins can delete messages — removed in real time for everyone
+- Profile pictures from a set of shared avatars
+- Profile updates (username, avatar) reflect immediately in the chat for all users
 
 ---
 
-## 🏗️ Architecture
+## Stack
 
-This project follows **Clean Architecture** principles, separating concerns into four distinct layers:
+- .NET 8.0 / ASP.NET Core
+- SignalR
+- PostgreSQL with Entity Framework Core 9
+- JWT Bearer authentication
+- BCrypt.Net for password hashing
 
-```
-Backend/src/
-├── Domain/               # Enterprise business rules
-│   ├── Entities/         # User, Message, Picture
-│   ├── Enums/            # UserRole
-│   └── Errors/           # DomainErrors
-├── Application/          # Application business rules
-│   ├── Interfaces/       # Repository and service contracts
-│   ├── Services/         # Business logic
-│   └── Common/           # DTOs
-├── Infrastructure/       # Frameworks & drivers
-│   ├── Data/             # AppDbContext (EF Core)
-│   └── Repositories/     # Data access implementations
-└── chat-in-realtime/     # Interface adapters
-    ├── Controllers/      # HTTP endpoints
-    ├── Hubs/             # ChatHub (SignalR)
-    ├── Notifications/    # ChatNotificationService
-    └── Extensions/       # DI, JWT, Swagger config
-```
+The project follows Clean Architecture — Domain, Application, Infrastructure, and Presentation layers.
 
 ---
 
-## 🚀 Getting Started
+## Getting started
 
-### Prerequisites
+### Requirements
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- [PostgreSQL](https://www.postgresql.org/download/)
-
-### Database Setup (Fedora/Linux)
-
-```bash
-sudo dnf install postgresql postgresql-server
-sudo postgresql-setup --initdb
-sudo systemctl start postgresql && sudo systemctl enable postgresql
-
-# Set password
-sudo -u postgres psql
-ALTER USER postgres PASSWORD 'yourpassword';
-\q
-
-# Edit pg_hba.conf: change 'ident' to 'md5' for localhost
-sudo nano /var/lib/pgsql/data/pg_hba.conf
-sudo systemctl restart postgresql
-```
+- .NET 8.0 SDK
+- PostgreSQL
 
 ### Configuration
 
@@ -108,48 +67,33 @@ cd Backend/src/chat-in-realtime
 dotnet run
 ```
 
-- API: `http://localhost:5135`
-- Swagger UI: `http://localhost:5135/swagger`
+API runs at `http://localhost:5135`. Swagger available at `/swagger`.
 
-> ⚠️ The database is dropped and re-seeded on every server start (development only).
-
----
-
-## 🔒 Authentication
-
-All protected endpoints require a JWT Bearer token:
-
-```
-Authorization: Bearer {token}
-```
-
-Obtain the token via `POST /api/auth/login`. Tokens expire after **8 hours**.
-
-For SignalR connections, the token is passed as a query string parameter (handled automatically by the SignalR client library).
+> The database is dropped and re-seeded on every start — development only.
 
 ---
 
-## 📡 API Reference
+## API
 
 ### Auth
 
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/api/auth/register` | Public | Register a new user |
-| POST | `/api/auth/login` | Public | Login and receive JWT |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and get JWT |
 
 ### Users
 
 | Method | Endpoint | Access | Description |
 |--------|----------|--------|-------------|
-| GET | `/api/user/me` | Authenticated | Get own profile (id, username, role, pictureUrl) |
-| GET | `/api/user/profiles` | Authenticated | Get all users' username and picture |
-| GET | `/api/user` | Admin | Get all users with full data |
+| GET | `/api/user/me` | Authenticated | Own profile |
+| GET | `/api/user/profiles` | Authenticated | All users' username and picture |
+| GET | `/api/user` | Admin | All users with full data |
 | PATCH | `/api/user/me` | Authenticated | Update own profile |
-| PATCH | `/api/user/{id}` | Admin | Update any user's profile |
-| POST | `/api/user/{id}/ban` | Admin | Ban a user (kicks if connected) |
+| PATCH | `/api/user/{id}` | Admin | Update any user |
+| POST | `/api/user/{id}/ban` | Admin | Ban a user |
 | POST | `/api/user/{id}/unban` | Admin | Unban a user |
-| POST | `/api/user/{id}/role` | Admin | Change a user's role |
+| POST | `/api/user/{id}/role` | Admin | Change role |
 
 ### Messages
 
@@ -159,93 +103,54 @@ For SignalR connections, the token is passed as a query string parameter (handle
 
 ### Pictures
 
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| GET | `/api/picture` | Public | Get all available avatars |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/picture` | Get available avatars |
 
 ---
 
-## ⚡ SignalR Hub — `/chathub`
+## SignalR Hub — `/chathub`
+
+Authentication is handled via the JWT token passed to the connection. Banned users are rejected on connect.
 
 ### Client → Server
 
-| Method | Access | Description |
-|--------|--------|-------------|
-| `SendMessage({ content })` | Authenticated | Send a message |
-| `LoadMessages(page)` | Authenticated | Load paginated history (20/page) |
-| `StartTyping()` | Authenticated | Notify others you're typing |
-| `StopTyping()` | Authenticated | Notify others you stopped typing |
-| `KickUser(userId)` | Admin, Moderator | Kick a connected user |
+| Method | Description |
+|--------|-------------|
+| `SendMessage({ content })` | Send a message (rate limited: 1/sec) |
+| `LoadMessages(page)` | Load message history (20 per page) |
+| `StartTyping()` | Notify others you're typing |
+| `StopTyping()` | Notify others you stopped |
+| `KickUser(userId)` | Kick a user (Admin/Moderator only) |
 
-### Server → Client Events
+### Server → Client
 
-| Event | Emitted To | Payload | Description |
-|-------|-----------|---------|-------------|
-| `ReceiveMessage` | All | `MessageReceivedDTO` | New message broadcast |
-| `LoadMessages` | Caller | `MessageReceivedDTO[], page` | Paginated history |
-| `MessageDeleted` | All | `messageId: guid` | A message was deleted |
-| `UserConnected` | All | `username: string` | User joined |
-| `UserDisconnected` | All | `username: string` | User left |
-| `UpdateConnectedUsers` | All | `string[]` | Updated online list |
-| `UserTyping` | Others | `username: string` | Someone is typing |
-| `UserStoppedTyping` | Others | `username: string` | Someone stopped typing |
-| `UserUpdated` | All | `{ userId, username?, pictureUrl? }` | Profile updated |
-| `Kicked` | Target only | `reason: string` | User was kicked or banned |
-
----
-
-## 🗂️ DTOs
-
-```csharp
-record RegisterRequestDTO(string Username, string Password);
-record LoginRequestDTO(string Username, string Password);
-record SendMessageDTO(string Content);
-record MessageReceivedDTO(Guid Id, string Content, DateTime Timestamp, UserSenderDTO Sender);
-record UserSenderDTO(Guid Id, string Username, string? PictureUrl);
-record UserProfileDTO(string Username, string? PictureUrl);
-record PictureDTO(Guid Id, string Url);
-record UserUpdateRequestDTO(string? Username, string? Password, Guid? PictureId);
-record ChangeRoleRequestDTO(UserRole Role);
-```
+| Event | Emitted to | Description |
+|-------|-----------|-------------|
+| `ReceiveMessage` | All | New message |
+| `LoadMessages` | Caller | Paginated history |
+| `MessageDeleted` | All | A message was deleted |
+| `UserConnected` | All | Someone joined |
+| `UserDisconnected` | All | Someone left |
+| `UpdateConnectedUsers` | All | Updated online list |
+| `UserTyping` | Others | Someone is typing |
+| `UserStoppedTyping` | Others | Someone stopped typing |
+| `UserUpdated` | All | Profile was updated |
+| `Kicked` | Target | You were kicked or banned |
 
 ---
 
-## 📐 Domain Model
+## Roles
 
-### UserRole
-
-| Value | Int | Permissions |
-|-------|-----|-------------|
-| User | 0 | Send messages |
-| Moderator | 1 | Delete messages, kick users |
-| Admin | 2 | Full access: ban, unban, kick, delete messages, change roles |
+| Role | Permissions |
+|------|-------------|
+| User | Send messages |
+| Moderator | Delete messages, kick users |
+| Admin | Everything: ban, unban, kick, delete, change roles |
 
 ---
 
-## 📋 Business Rules
-
-- Passwords are hashed with **BCrypt** on register and on update
-- Usernames must be **unique** (validated at service level)
-- Messages cannot be **empty or whitespace**
-- **Rate limiting**: max 1 message per second per user
-- Banned users **cannot connect** to the Hub
-- Banning a connected user **kicks them in real time**
-- Deleting a message **broadcasts** a `MessageDeleted` event to all clients
-- Updating a profile **broadcasts** a `UserUpdated` event to all clients
-- User IDs are **not exposed** to regular users — only Admins can see them
-- Avatars are **shared** resources, not owned by any specific user
-
----
-
-## 🔮 Roadmap
-
-- [ ] Proper error responses for register/login
-- [ ] Refresh token support
-- [ ] Multiple chat rooms
-- [ ] Private messages
-- [ ] Message reactions
-
-## 👥 Contributors
+## Contributors
 
 <table>
   <tr>
