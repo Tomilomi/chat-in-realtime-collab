@@ -6,9 +6,6 @@ namespace Domain.Entities
         public Guid Id { get; private set; }
         public string Url { get; private set; }
         
-        // propiedad de navegacion
-        public User User { get; private set; }
-        
         // Constructores agregados
         
         public Picture(string url)
