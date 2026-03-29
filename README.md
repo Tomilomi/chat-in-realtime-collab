@@ -35,6 +35,11 @@ Real-time chat backend built with ASP.NET Core and SignalR. Started as a learnin
 The project follows Clean Architecture — Domain, Application, Infrastructure, and Presentation layers.
 
 ---
+## Preview
+![login](./assets/login.png)
+![chat](./assets/chathub.png)
+![profile](./assets/profile.png)
+![moderation](./assets/moderation.png)
 
 ## Getting started
 
