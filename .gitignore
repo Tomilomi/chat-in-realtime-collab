@@ -5,6 +5,7 @@
 
 .env
 *.env
+.env.local
 # Configuraciones locales de desarrollo
 appsettings.Development.json
 
